@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   // Buscar o exercício atual
   const currentExercise = await prisma.exercise.findUnique({
     where: { id },
-    select: { workoutId: true, order: true }
+    select: { workoutId: true, order: true, groupId: true }
   })
 
   if (!currentExercise) {
@@ -39,54 +39,136 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { workoutId, order: currentOrder } = currentExercise
+  const { workoutId, order: currentOrder, groupId } = currentExercise
+
+  // Se o exercício faz parte de um grupo, pegar todos os exercícios do grupo
+  let groupExercises: any[] = []
+  if (groupId) {
+    groupExercises = await prisma.exercise.findMany({
+      where: { workoutId, groupId },
+      orderBy: { order: 'asc' }
+    })
+  } else {
+    groupExercises = [currentExercise]
+  }
+
+  // Pegar o primeiro e último order do grupo
+  const minOrder = Math.min(...groupExercises.map(e => e.order))
+  const maxOrder = Math.max(...groupExercises.map(e => e.order))
+  const groupSize = groupExercises.length
 
   if (direction === 'up') {
-    // Buscar exercício acima
-    const exerciseAbove = await prisma.exercise.findFirst({
+    // Buscar exercício(s) acima do grupo
+    const exercisesAbove = await prisma.exercise.findMany({
       where: {
         workoutId,
-        order: { lt: currentOrder }
+        order: { lt: minOrder }
       },
       orderBy: { order: 'desc' }
     })
 
-    if (exerciseAbove) {
-      // Trocar ordens
-      await prisma.$transaction([
-        prisma.exercise.update({
-          where: { id },
-          data: { order: exerciseAbove.order }
-        }),
-        prisma.exercise.update({
-          where: { id: exerciseAbove.id },
-          data: { order: currentOrder }
-        })
-      ])
+    if (exercisesAbove.length === 0) return await prisma.exercise.findMany({
+      where: { workoutId },
+      orderBy: { order: 'asc' }
+    })
+
+    // Verificar se o exercício acima tem groupId
+    const firstAbove = exercisesAbove[0]
+    let targetExercises: any[] = []
+    
+    if (firstAbove.groupId) {
+      // Pegar todos do grupo acima
+      targetExercises = await prisma.exercise.findMany({
+        where: { workoutId, groupId: firstAbove.groupId },
+        orderBy: { order: 'asc' }
+      })
+    } else {
+      targetExercises = [firstAbove]
     }
+
+    const targetMinOrder = Math.min(...targetExercises.map(e => e.order))
+    const targetSize = targetExercises.length
+
+    // Trocar posições dos grupos
+    const updates = []
+    
+    // Mover grupo atual para cima
+    for (let i = 0; i < groupSize; i++) {
+      updates.push(
+        prisma.exercise.update({
+          where: { id: groupExercises[i].id },
+          data: { order: targetMinOrder + i }
+        })
+      )
+    }
+    
+    // Mover grupo alvo para baixo
+    for (let i = 0; i < targetSize; i++) {
+      updates.push(
+        prisma.exercise.update({
+          where: { id: targetExercises[i].id },
+          data: { order: minOrder + i }
+        })
+      )
+    }
+
+    await prisma.$transaction(updates)
   } else {
-    // Buscar exercício abaixo
-    const exerciseBelow = await prisma.exercise.findFirst({
+    // Buscar exercício(s) abaixo do grupo
+    const exercisesBelow = await prisma.exercise.findMany({
       where: {
         workoutId,
-        order: { gt: currentOrder }
+        order: { gt: maxOrder }
       },
       orderBy: { order: 'asc' }
     })
 
-    if (exerciseBelow) {
-      // Trocar ordens
-      await prisma.$transaction([
-        prisma.exercise.update({
-          where: { id },
-          data: { order: exerciseBelow.order }
-        }),
-        prisma.exercise.update({
-          where: { id: exerciseBelow.id },
-          data: { order: currentOrder }
-        })
-      ])
+    if (exercisesBelow.length === 0) return await prisma.exercise.findMany({
+      where: { workoutId },
+      orderBy: { order: 'asc' }
+    })
+
+    // Verificar se o exercício abaixo tem groupId
+    const firstBelow = exercisesBelow[0]
+    let targetExercises: any[] = []
+    
+    if (firstBelow.groupId) {
+      // Pegar todos do grupo abaixo
+      targetExercises = await prisma.exercise.findMany({
+        where: { workoutId, groupId: firstBelow.groupId },
+        orderBy: { order: 'asc' }
+      })
+    } else {
+      targetExercises = [firstBelow]
     }
+
+    const targetMinOrder = Math.min(...targetExercises.map(e => e.order))
+    const targetSize = targetExercises.length
+
+    // Trocar posições dos grupos
+    const updates = []
+    
+    // Mover grupo atual para baixo
+    for (let i = 0; i < groupSize; i++) {
+      updates.push(
+        prisma.exercise.update({
+          where: { id: groupExercises[i].id },
+          data: { order: targetMinOrder + i }
+        })
+      )
+    }
+    
+    // Mover grupo alvo para cima
+    for (let i = 0; i < targetSize; i++) {
+      updates.push(
+        prisma.exercise.update({
+          where: { id: targetExercises[i].id },
+          data: { order: minOrder + i }
+        })
+      )
+    }
+
+    await prisma.$transaction(updates)
   }
 
   // Retornar lista atualizada de exercícios
