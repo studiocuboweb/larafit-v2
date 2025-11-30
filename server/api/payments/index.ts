@@ -1,4 +1,5 @@
 import prisma from '../../utils/prisma'
+import { PaymentStatus } from '@prisma/client'
 
 // API de pagamentos
 export default defineEventHandler(async (event) => {
@@ -10,11 +11,18 @@ export default defineEventHandler(async (event) => {
     const studentId = query.studentId as string | undefined
     const status = query.status as string | undefined
 
+    const whereClause: any = {}
+    
+    if (studentId) {
+      whereClause.studentId = studentId
+    }
+    
+    if (status && status in PaymentStatus) {
+      whereClause.status = status as PaymentStatus
+    }
+
     const payments = await prisma.payment.findMany({
-      where: {
-        ...(studentId && { studentId }),
-        ...(status && { status })
-      },
+      where: whereClause,
       include: {
         student: {
           include: {
