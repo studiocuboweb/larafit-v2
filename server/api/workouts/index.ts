@@ -7,27 +7,32 @@ export default defineEventHandler(async (event) => {
   // GET /api/workouts - Listar todos os treinos
   if (method === 'GET') {
     const query = getQuery(event)
-    const studentId = query.studentId as string | undefined
+    const { studentId, teacherId, status } = query
+
+    const where: any = {}
+    if (studentId) where.studentId = String(studentId)
+    if (teacherId) where.teacherId = String(teacherId)
+    if (status) where.status = String(status)
 
     const workouts = await prisma.workout.findMany({
-      where: studentId ? { studentId } : undefined,
+      where: Object.keys(where).length > 0 ? where : undefined,
       include: {
         student: {
           include: {
             user: {
-              select: { name: true, email: true }
+              select: { name: true, email: true, active: true }
             }
           }
         },
         teacher: {
           include: {
             user: {
-              select: { name: true }
+              select: { name: true, email: true }
             }
           }
         },
-        exercises: {
-          orderBy: { order: 'asc' }
+        _count: {
+          select: { exercises: true }
         }
       },
       orderBy: { createdAt: 'desc' }

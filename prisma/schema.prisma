@@ -69,9 +69,10 @@ model Student {
   updatedAt   DateTime  @updatedAt
 
   // Relações
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workouts  Workout[]
-  payments  Payment[]
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workouts            Workout[]
+  payments            Payment[]
+  exerciseExecutions  ExerciseExecution[]
 
   @@map("students")
 }
@@ -122,12 +123,14 @@ model Exercise {
   weight      String?  // Peso (pode ser "20kg" ou "bodyweight")
   notes       String?  @db.Text
   order       Int      // Ordem do exercício no treino
+  groupId     String?  // ID do grupo (biset/triset) - exercícios com mesmo groupId são executados em sequência
   videoUrl    String?  // URL de vídeo explicativo
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   // Relações
-  workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  workout    Workout              @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  executions ExerciseExecution[]
 
   @@map("exercises")
 }
@@ -149,4 +152,22 @@ model Payment {
   student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@map("payments")
+}
+
+model ExerciseExecution {
+  id          String   @id @default(cuid())
+  exerciseId  String
+  studentId   String
+  completedAt DateTime @default(now())
+  duration    Int      // Duração em segundos
+  setsDone    Int      // Quantas séries foram feitas
+  notes       String?  @db.Text // Observações do aluno
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relações
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("exercise_executions")
 }
