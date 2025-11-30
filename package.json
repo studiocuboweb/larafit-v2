@@ -9,6 +9,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^3.0.3",
