@@ -63,7 +63,7 @@
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                <span>{{ workout.exercises.length }} exercícios</span>
+                <span>{{ workout._count?.exercises || 0 }} exercícios</span>
               </div>
             </div>
 
@@ -83,20 +83,10 @@
 
             <!-- Preview de exercícios -->
             <div class="border-t pt-4">
-              <p class="text-xs font-medium text-gray-500 mb-2">EXERCÍCIOS:</p>
-              <ul class="space-y-1">
-                <li
-                  v-for="exercise in workout.exercises.slice(0, 3)"
-                  :key="exercise.id"
-                  class="text-sm text-gray-700 flex items-start gap-2"
-                >
-                  <span class="text-gray-400">•</span>
-                  <span>{{ exercise.name }}</span>
-                </li>
-                <li v-if="workout.exercises.length > 3" class="text-sm text-gray-500 italic">
-                  + {{ workout.exercises.length - 3 }} exercícios
-                </li>
-              </ul>
+              <p class="text-xs font-medium text-gray-500 mb-2">TREINO COMPLETO</p>
+              <p class="text-sm text-gray-700">
+                Este treino contém <strong>{{ workout._count?.exercises || 0 }} exercícios</strong>
+              </p>
             </div>
 
             <!-- Última execução -->
@@ -168,31 +158,33 @@ const { data: executions } = await useFetch('/api/executions', {
 })
 
 const filteredWorkouts = computed(() => {
-  if (!workouts.value) return []
+  if (!workouts.value || !Array.isArray(workouts.value)) return []
   
   let filtered = workouts.value
   
   if (statusFilter.value === 'ACTIVE') {
-    filtered = filtered.filter(w => w.status === 'ACTIVE')
+    filtered = filtered.filter((w: any) => w.status === 'ACTIVE')
   }
   
   return filtered
 })
 
 const lastExecution = (workoutId: string) => {
-  if (!executions.value) return null
+  if (!executions.value || !Array.isArray(executions.value)) return null
   
   // Buscar a última execução de qualquer exercício deste treino
-  const workoutExerciseIds = workouts.value
-    ?.find(w => w.id === workoutId)
-    ?.exercises.map(e => e.id) || []
-  
-  const workoutExecutions = executions.value.filter(ex => 
-    workoutExerciseIds.includes(ex.exerciseId)
-  )
+  const workoutExecutions = executions.value.filter((ex: any) => {
+    // Verificar se o exercício pertence a este workout
+    return ex.exercise?.workout?.id === workoutId
+  })
   
   if (workoutExecutions.length === 0) return null
   
-  return workoutExecutions[0].completedAt
+  // Retornar a execução mais recente
+  const sortedExecutions = workoutExecutions.sort((a: any, b: any) => 
+    new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
+  )
+  
+  return sortedExecutions[0].completedAt
 }
 </script>

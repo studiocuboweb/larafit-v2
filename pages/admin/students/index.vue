@@ -162,7 +162,7 @@
                       </span>
                     </td>
                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <NuxtLink :to="`/admin/students/${student.id}`" class="text-blue-600 hover:text-blue-900 mr-4">
+                      <NuxtLink :to="`/admin/students/${student.id}/edit`" class="text-blue-600 hover:text-blue-900 mr-4">
                         Editar
                       </NuxtLink>
                       <NuxtLink :to="`/admin/students/${student.id}/workouts`" class="text-green-600 hover:text-green-900">
