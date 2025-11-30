@@ -226,23 +226,37 @@
 <script setup lang="ts">
 const { formatDate, formatCurrency } = useFormatters()
 
-// Buscar dados
-const { data: payments, refresh: refreshPayments } = await useFetch('/api/payments')
-const { data: students } = await useFetch('/api/students')
-
 const filters = ref({
   status: '',
   studentId: ''
 })
 
+// Buscar dados com filtros
+const { data: payments, refresh: refreshPayments } = await useFetch('/api/payments', {
+  query: filters
+})
+const { data: students } = await useFetch('/api/students')
+
 const filteredPayments = computed(() => {
   if (!payments.value) return []
-  return payments.value
+  let result = [...payments.value]
+  
+  // Aplicar filtros localmente também para garantir
+  if (filters.value.status) {
+    result = result.filter(p => p.status === filters.value.status)
+  }
+  
+  if (filters.value.studentId) {
+    result = result.filter(p => p.studentId === filters.value.studentId)
+  }
+  
+  return result
 })
 
 const stats = computed(() => {
   if (!payments.value) return { paid: 0, pending: 0, overdue: 0, totalPaid: 0 }
   
+  // Calcular stats com base em todos os pagamentos (não filtrados)
   return {
     paid: payments.value.filter(p => p.status === 'PAID').length,
     pending: payments.value.filter(p => p.status === 'PENDING').length,
@@ -254,16 +268,12 @@ const stats = computed(() => {
 })
 
 const applyFilters = async () => {
-  const params: any = {}
-  if (filters.value.status) params.status = filters.value.status
-  if (filters.value.studentId) params.studentId = filters.value.studentId
-  
   await refreshPayments()
 }
 
 const clearFilters = () => {
   filters.value = { status: '', studentId: '' }
-  applyFilters()
+  refreshPayments()
 }
 
 const markAsPaid = async (paymentId: string) => {
