@@ -14,7 +14,7 @@
             <NuxtLink to="/student/profile" class="text-white hover:text-blue-100 px-3 py-2 rounded-md text-sm font-medium">
               Perfil
             </NuxtLink>
-            <button class="bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-800">
+            <button @click="handleLogout" class="bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-800">
               Sair
             </button>
           </div>
@@ -28,3 +28,14 @@
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+const handleLogout = () => {
+  // Remover token e dados do usuário
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  
+  // Redirecionar para login
+  navigateTo('/')
+}
+</script>

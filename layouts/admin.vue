@@ -27,7 +27,7 @@
             </div>
           </div>
           <div class="flex items-center">
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+            <button @click="handleLogout" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
               Sair
             </button>
           </div>
@@ -41,3 +41,14 @@
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+const handleLogout = () => {
+  // Remover token e dados do usuário
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  
+  // Redirecionar para login
+  navigateTo('/')
+}
+</script>
