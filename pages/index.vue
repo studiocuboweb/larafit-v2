@@ -10,6 +10,11 @@
         </p>
       </div>
       <div class="mt-8 bg-white rounded-lg shadow-2xl p-8">
+        <!-- Mensagem de erro -->
+        <div v-if="error" class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {{ error }}
+        </div>
+
         <form class="space-y-6" @submit.prevent="handleLogin">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">
@@ -48,9 +53,11 @@
           <div>
             <button
               type="submit"
-              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              :disabled="loading"
+              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Entrar
+              <span v-if="loading">Entrando...</span>
+              <span v-else>Entrar</span>
             </button>
           </div>
         </form>
@@ -88,19 +95,45 @@ const form = ref({
   password: ''
 })
 
+const loading = ref(false)
+const error = ref('')
+
 const handleLogin = async () => {
+  loading.value = true
+  error.value = ''
+  
   try {
-    // TODO: Implementar autenticação real
-    console.log('Login attempt:', form.value)
-    
-    // Mock redirect baseado no role
-    if (form.value.email.includes('admin')) {
-      await navigateTo('/admin')
-    } else {
-      await navigateTo('/student/workouts')
+    const { data, error: fetchError } = await useFetch('/api/auth/login', {
+      method: 'POST',
+      body: {
+        email: form.value.email,
+        password: form.value.password
+      }
+    })
+
+    if (fetchError.value) {
+      error.value = fetchError.value.data?.message || 'Erro ao fazer login'
+      return
     }
-  } catch (error) {
-    console.error('Erro no login:', error)
+
+    if (data.value) {
+      // Salvar token e dados do usuário
+      localStorage.setItem('token', data.value.token)
+      localStorage.setItem('user', JSON.stringify(data.value.user))
+      
+      // Redirecionar baseado no role
+      if (data.value.user.role === 'ADMIN') {
+        await navigateTo('/admin')
+      } else if (data.value.user.role === 'TEACHER') {
+        await navigateTo('/admin') // Professores também acessam admin
+      } else if (data.value.user.role === 'STUDENT') {
+        await navigateTo('/student/workouts')
+      }
+    }
+  } catch (err: any) {
+    error.value = err.message || 'Erro ao fazer login'
+  } finally {
+    loading.value = false
   }
 }
 </script>
