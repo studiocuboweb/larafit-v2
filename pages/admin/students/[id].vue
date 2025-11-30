@@ -74,10 +74,11 @@
             </label>
             <input
               id="phone"
-              v-model="form.phone"
+              v-model="phoneDisplay"
+              @input="handlePhoneInput"
               type="tel"
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
-              placeholder="(11) 99999-9999"
+              placeholder="(11) 99425-3218"
             />
           </div>
 
@@ -149,6 +150,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
+const { applyMask } = useMask()
 
 const studentId = route.params.id as string
 const isEditing = computed(() => studentId && studentId !== 'new')
@@ -162,6 +164,15 @@ const form = ref({
   active: true,
   observations: ''
 })
+
+const phoneDisplay = ref('')
+
+const handlePhoneInput = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const masked = applyMask(input.value, 'phone')
+  phoneDisplay.value = masked
+  form.value.phone = masked.replace(/\D/g, '') // Salva apenas números
+}
 
 const loading = ref(false)
 const error = ref('')
@@ -180,6 +191,10 @@ if (isEditing.value) {
       birthDate: student.value.birthDate ? new Date(student.value.birthDate).toISOString().split('T')[0] : '',
       active: student.value.user.active,
       observations: student.value.observations || ''
+    }
+    // Aplicar máscara ao telefone carregado
+    if (form.value.phone) {
+      phoneDisplay.value = applyMask(form.value.phone, 'phone')
     }
   }
 }

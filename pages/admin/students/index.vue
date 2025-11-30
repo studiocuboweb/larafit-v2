@@ -50,7 +50,7 @@
                       {{ student.user.email }}
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {{ student.phone || '-' }}
+                      {{ formatPhone(student.phone) }}
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <span :class="[
@@ -80,6 +80,8 @@
 </template>
 
 <script setup lang="ts">
+const { formatPhone } = useFormatters()
+
 // Buscar alunos
 const { data: students } = await useFetch('/api/students')
 </script>
