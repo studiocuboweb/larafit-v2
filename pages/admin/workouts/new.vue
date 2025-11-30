@@ -1,6 +1,7 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8">
-    <div class="sm:flex sm:items-center">
+  <NuxtLayout name="admin">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-3xl font-bold text-gray-900">Novo Treino</h1>
         <p class="mt-2 text-sm text-gray-700">Crie um novo treino para um aluno</p>
@@ -156,7 +157,8 @@
         </div>
       </form>
     </div>
-  </div>
+    </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">

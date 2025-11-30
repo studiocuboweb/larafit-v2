@@ -1,6 +1,7 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8">
-    <div v-if="workout" class="space-y-6">
+  <NuxtLayout name="admin">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <div v-if="workout" class="space-y-6">
       <!-- Header -->
       <div class="sm:flex sm:items-center sm:justify-between">
         <div>
@@ -415,7 +416,8 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
