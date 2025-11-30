@@ -21,7 +21,7 @@
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Total de Alunos</dt>
-                  <dd class="text-3xl font-semibold text-gray-900">{{ stats.students }}</dd>
+                  <dd class="text-3xl font-semibold text-gray-900">{{ displayStats.students }}</dd>
                 </dl>
               </div>
             </div>
@@ -39,7 +39,7 @@
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Professores</dt>
-                  <dd class="text-3xl font-semibold text-gray-900">{{ stats.teachers }}</dd>
+                  <dd class="text-3xl font-semibold text-gray-900">{{ displayStats.teachers }}</dd>
                 </dl>
               </div>
             </div>
@@ -57,7 +57,7 @@
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Treinos Ativos</dt>
-                  <dd class="text-3xl font-semibold text-gray-900">{{ stats.workouts }}</dd>
+                  <dd class="text-3xl font-semibold text-gray-900">{{ displayStats.workouts }}</dd>
                 </dl>
               </div>
             </div>
@@ -75,7 +75,7 @@
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Receita Mensal</dt>
-                  <dd class="text-3xl font-semibold text-gray-900">R$ {{ stats.revenue.toLocaleString('pt-BR') }}</dd>
+                  <dd class="text-3xl font-semibold text-gray-900">R$ {{ displayStats.revenue.toLocaleString('pt-BR') }}</dd>
                 </dl>
               </div>
             </div>
@@ -121,26 +121,14 @@
 </template>
 
 <script setup lang="ts">
-// Mock data - depois virá da API
-const stats = ref({
+// Buscar estatísticas da API
+const { data: stats, pending } = await useFetch('/api/stats/dashboard')
+
+// Dados padrão enquanto carrega
+const displayStats = computed(() => stats.value || {
   students: 0,
   teachers: 0,
   workouts: 0,
   revenue: 0
-})
-
-// Buscar estatísticas na montagem do componente
-onMounted(async () => {
-  try {
-    // TODO: Implementar chamadas reais à API
-    stats.value = {
-      students: 45,
-      teachers: 5,
-      workouts: 120,
-      revenue: 15750
-    }
-  } catch (error) {
-    console.error('Erro ao carregar estatísticas:', error)
-  }
 })
 </script>

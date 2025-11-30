@@ -50,54 +50,11 @@
 </template>
 
 <script setup lang="ts">
-// Mock data - depois virá da API
-const workouts = ref([
-  {
-    id: '1',
-    name: 'Treino A - Peito e Tríceps',
-    description: 'Foco em força e hipertrofia',
-    status: 'ACTIVE',
-    teacher: {
-      user: {
-        name: 'João Silva'
-      }
-    },
-    exercises: [1, 2, 3, 4, 5] // Mock
-  },
-  {
-    id: '2',
-    name: 'Treino B - Costas e Bíceps',
-    description: 'Trabalho de puxada',
-    status: 'ACTIVE',
-    teacher: {
-      user: {
-        name: 'João Silva'
-      }
-    },
-    exercises: [1, 2, 3, 4] // Mock
-  },
-  {
-    id: '3',
-    name: 'Treino C - Pernas',
-    description: 'Treino completo de membros inferiores',
-    status: 'ACTIVE',
-    teacher: {
-      user: {
-        name: 'João Silva'
-      }
-    },
-    exercises: [1, 2, 3, 4, 5, 6] // Mock
-  }
-])
+// TODO: Pegar ID do aluno logado (por enquanto usando o primeiro aluno do seed)
+const studentId = 'cmikwyrwr0006jw7szhyzwztc' // Temporário - Carlos Oliveira
 
 // Buscar treinos do aluno
-onMounted(async () => {
-  try {
-    // TODO: Implementar chamada real à API
-    // const { data } = await useFetch('/api/workouts?studentId=STUDENT_ID')
-    // workouts.value = data.value
-  } catch (error) {
-    console.error('Erro ao carregar treinos:', error)
-  }
-})
+const { data: workoutsData } = await useFetch(`/api/workouts?studentId=${studentId}`)
+
+const workouts = computed(() => workoutsData.value || [])
 </script>
