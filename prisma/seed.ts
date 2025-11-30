@@ -69,11 +69,11 @@ async function main() {
   // Criar alunos
   const students = []
   const studentNames = [
-    { name: 'Carlos Oliveira', email: 'carlos@email.com', phone: '(11) 91234-5678' },
-    { name: 'Ana Paula', email: 'ana@email.com', phone: '(11) 92345-6789' },
-    { name: 'Pedro Costa', email: 'pedro@email.com', phone: '(11) 93456-7890' },
-    { name: 'Julia Ferreira', email: 'julia@email.com', phone: '(11) 94567-8901' },
-    { name: 'Lucas Mendes', email: 'lucas@email.com', phone: '(11) 95678-9012' }
+    { name: 'Carlos Oliveira', email: 'carlos@email.com', phone: '(11) 91234-5678', active: true },
+    { name: 'Ana Paula', email: 'ana@email.com', phone: '(11) 92345-6789', active: true },
+    { name: 'Pedro Costa', email: 'pedro@email.com', phone: '(11) 93456-7890', active: true },
+    { name: 'Julia Ferreira', email: 'julia@email.com', phone: '(11) 94567-8901', active: true },
+    { name: 'Lucas Mendes', email: 'lucas@email.com', phone: '(11) 95678-9012', active: false } // Usuário inativo para teste
   ]
 
   for (const studentData of studentNames) {
@@ -83,7 +83,7 @@ async function main() {
         password: 'aluno123',
         name: studentData.name,
         role: 'STUDENT',
-        active: true,
+        active: studentData.active,
         student: {
           create: {
             phone: studentData.phone,

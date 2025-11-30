@@ -32,6 +32,14 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  // Verificar se o usuário está ativo
+  if (!user.active) {
+    throw createError({
+      statusCode: 403,
+      message: 'Seu usuário está bloqueado, favor entrar em contato'
+    })
+  }
+
   // Verificar senha (temporário - sem bcrypt ainda)
   // TODO: Implementar verificação com bcrypt quando as senhas estiverem hashadas
   const isPasswordValid = password === user.password

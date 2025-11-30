@@ -11,8 +11,18 @@
       </div>
       <div class="mt-8 bg-white rounded-lg shadow-2xl p-8">
         <!-- Mensagem de erro -->
-        <div v-if="error" class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {{ error }}
+        <div v-if="error" class="mb-4 px-4 py-3 rounded" :class="[
+          isBlockedUser ? 'bg-yellow-50 border-2 border-yellow-400 text-yellow-800' : 'bg-red-50 border border-red-200 text-red-700'
+        ]">
+          <div class="flex items-start">
+            <svg v-if="isBlockedUser" class="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            <div>
+              <p class="font-semibold" :class="{ 'text-lg': isBlockedUser }">{{ error }}</p>
+              <p v-if="isBlockedUser" class="mt-1 text-sm">Entre em contato com a administração da academia para reativar seu acesso.</p>
+            </div>
+          </div>
         </div>
 
         <form class="space-y-6" @submit.prevent="handleLogin">
@@ -97,6 +107,7 @@ const form = ref({
 
 const loading = ref(false)
 const error = ref('')
+const isBlockedUser = computed(() => error.value.includes('bloqueado'))
 
 const handleLogin = async () => {
   loading.value = true
