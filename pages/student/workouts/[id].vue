@@ -1,8 +1,17 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-8">
-    <div class="max-w-4xl mx-auto">
-      <!-- Header -->
-      <div class="mb-6">
+  <NuxtLayout name="student">
+    <div class="px-4 sm:px-6 lg:px-8 py-8">
+      <div class="max-w-4xl mx-auto">
+        <!-- Loading -->
+        <div v-if="!workout" class="text-center py-12">
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <p class="mt-4 text-gray-600">Carregando treino...</p>
+        </div>
+
+        <!-- Content -->
+        <div v-else>
+        <!-- Header -->
+        <div class="mb-6">
         <NuxtLink
           to="/student/workouts"
           class="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-4"
@@ -56,7 +65,7 @@
             </div>
             <div>
               <p class="text-sm text-gray-500">Total de Exercícios</p>
-              <p class="text-2xl font-bold text-gray-900">{{ workout.exercises.length }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ workout.exercises?.length || 0 }}</p>
             </div>
           </div>
         </div>
@@ -195,8 +204,10 @@
 
       <!-- Espaçamento para botão fixo mobile -->
       <div class="h-20 sm:hidden"></div>
+        </div>
+      </div>
     </div>
-  </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
