@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
   // Buscar o exercício atual
   const currentExercise = await prisma.exercise.findUnique({
     where: { id },
-    select: { workoutId: true, order: true, groupId: true }
+    select: { id: true, workoutId: true, order: true, groupId: true }
   })
 
   if (!currentExercise) {
