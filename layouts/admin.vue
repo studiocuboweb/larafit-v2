@@ -141,7 +141,12 @@
 
 <script setup lang="ts">
 const mobileMenuOpen = ref(false)
-const { user } = useAuthUser()
+const { user, fetchUser } = useAuthUser()
+
+// Buscar dados do usuário ao montar o layout
+onMounted(async () => {
+  await fetchUser()
+})
 
 const handleLogout = () => {
   // Remover token e dados do usuário

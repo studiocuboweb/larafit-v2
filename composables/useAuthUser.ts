@@ -1,11 +1,25 @@
 export const useAuthUser = () => {
-  const user = useState<any>('authUser', () => null)
+  // Inicializar com dados do localStorage se disponível
+  const user = useState<any>('authUser', () => {
+    if (process.client) {
+      const stored = localStorage.getItem('user')
+      if (stored) {
+        try {
+          return JSON.parse(stored)
+        } catch {
+          return null
+        }
+      }
+    }
+    return null
+  })
 
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem('token')
       if (!token) {
         user.value = null
+        localStorage.removeItem('user')
         return null
       }
 
@@ -16,6 +30,8 @@ export const useAuthUser = () => {
       })
       
       user.value = response
+      // Salvar no localStorage para próxima vez
+      localStorage.setItem('user', JSON.stringify(response))
       return response
     } catch (error: any) {
       // Se for erro 401, token inválido - limpar e redirecionar
