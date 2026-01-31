@@ -179,25 +179,37 @@ const error = ref('')
 const success = ref('')
 
 // Carregar dados do aluno se estiver editando
-if (isEditing.value) {
-  const { data: student } = await useFetch(`/api/students/${studentId}`)
-  
-  if (student.value) {
-    form.value = {
-      name: student.value.user.name,
-      email: student.value.user.email,
-      password: '',
-      phone: student.value.phone || '',
-      birthDate: student.value.birthDate ? new Date(student.value.birthDate).toISOString().split('T')[0] : '',
-      active: student.value.user.active,
-      observations: student.value.observations || ''
-    }
-    // Aplicar máscara ao telefone carregado
-    if (form.value.phone) {
-      phoneDisplay.value = applyMask(form.value.phone, 'phone')
+onMounted(async () => {
+  if (isEditing.value) {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await $fetch(`/api/students/${studentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      
+      if (response) {
+        form.value = {
+          name: response.user.name,
+          email: response.user.email,
+          password: '',
+          phone: response.phone || '',
+          birthDate: response.birthDate ? new Date(response.birthDate).toISOString().split('T')[0] : '',
+          active: response.user.active,
+          observations: response.observations || ''
+        }
+        // Aplicar máscara ao telefone carregado
+        if (form.value.phone) {
+          phoneDisplay.value = applyMask(form.value.phone, 'phone')
+        }
+      }
+    } catch (err) {
+      error.value = 'Erro ao carregar dados do aluno'
+      console.error(err)
     }
   }
-}
+})
 
 const handleSubmit = async () => {
   loading.value = true
@@ -205,10 +217,15 @@ const handleSubmit = async () => {
   success.value = ''
 
   try {
+    const token = localStorage.getItem('token')
+    
     if (isEditing.value) {
       // Atualizar aluno existente
-      const { error: updateError } = await useFetch(`/api/students/${studentId}`, {
+      await $fetch(`/api/students/${studentId}`, {
         method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
         body: {
           name: form.value.name,
           phone: form.value.phone,
@@ -218,11 +235,6 @@ const handleSubmit = async () => {
         }
       })
 
-      if (updateError.value) {
-        error.value = updateError.value.data?.message || 'Erro ao atualizar aluno'
-        return
-      }
-
       success.value = 'Aluno atualizado com sucesso!'
       setTimeout(() => {
         router.push('/admin/students')
@@ -230,8 +242,11 @@ const handleSubmit = async () => {
     } else {
       // Criar novo aluno
       // Primeiro criar o usuário
-      const { data: userData, error: userError } = await useFetch('/api/users', {
+      const userData = await $fetch('/api/users', {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
         body: {
           email: form.value.email,
           password: form.value.password,
@@ -241,26 +256,19 @@ const handleSubmit = async () => {
         }
       })
 
-      if (userError.value) {
-        error.value = userError.value.data?.message || 'Erro ao criar usuário'
-        return
-      }
-
       // Depois criar o registro de student
-      const { error: studentError } = await useFetch('/api/students', {
+      await $fetch('/api/students', {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
         body: {
-          userId: userData.value.id,
+          userId: userData.id,
           phone: form.value.phone,
           birthDate: form.value.birthDate || null,
           observations: form.value.observations
         }
       })
-
-      if (studentError.value) {
-        error.value = studentError.value.data?.message || 'Erro ao criar aluno'
-        return
-      }
 
       success.value = 'Aluno criado com sucesso!'
       setTimeout(() => {
@@ -268,7 +276,7 @@ const handleSubmit = async () => {
       }, 1500)
     }
   } catch (err: any) {
-    error.value = err.message || 'Erro ao salvar aluno'
+    error.value = err.data?.message || err.message || 'Erro ao salvar aluno'
   } finally {
     loading.value = false
   }
