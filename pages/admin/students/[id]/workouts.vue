@@ -28,6 +28,12 @@
             </NuxtLink>
           </div>
         </div>
+        <div v-else class="sm:flex sm:items-center sm:justify-between">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">Treinos do aluno</h1>
+            <p class="mt-2 text-sm text-gray-700">Aluno: {{ studentId }}</p>
+          </div>
+        </div>
       </div>
 
       <!-- Estatísticas -->
@@ -191,12 +197,31 @@ const route = useRoute()
 const studentId = route.params.id as string
 const { formatDate } = useFormatters()
 
-// Buscar dados do aluno
-const { data: student } = await useFetch(`/api/students/${studentId}`)
+const student = ref<any>(null)
+const workouts = ref<any[]>([])
 
-// Buscar treinos do aluno
-const { data: workouts, refresh } = await useFetch('/api/workouts', {
-  query: { studentId }
+const loadData = async () => {
+  try {
+    const token = localStorage.getItem('token')
+    student.value = await $fetch(`/api/students/${studentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    workouts.value = await $fetch('/api/workouts', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      query: { studentId }
+    })
+  } catch (error) {
+    console.error('Erro ao carregar aluno/treinos:', error)
+  }
+}
+
+onMounted(async () => {
+  await loadData()
 })
 
 // Estatísticas
@@ -217,11 +242,15 @@ const confirmDelete = async (workout: any) => {
   }
 
   try {
+    const token = localStorage.getItem('token')
     await $fetch(`/api/workouts/${workout.id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
     
-    await refresh()
+    await loadData()
     alert('Treino excluído com sucesso!')
   } catch (error) {
     console.error('Erro ao excluir treino:', error)
