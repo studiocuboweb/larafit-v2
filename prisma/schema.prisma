@@ -62,6 +62,7 @@ model User {
 model Student {
   id          String    @id @default(cuid())
   userId      String    @unique
+  teacherId   String    // Professor responsável pelo aluno
   phone       String?
   birthDate   DateTime?
   observations String?  @db.Text
@@ -70,6 +71,7 @@ model Student {
 
   // Relações
   user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  teacher             Teacher              @relation(fields: [teacherId], references: [id])
   workouts            Workout[]
   payments            Payment[]
   exerciseExecutions  ExerciseExecution[]
@@ -88,6 +90,7 @@ model Teacher {
 
   // Relações
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  students Student[] // Alunos sob responsabilidade do professor
   workouts Workout[]
 
   @@map("teachers")

@@ -1,18 +1,11 @@
 import prisma from '../../utils/prisma'
+import { requireAuth } from '../../utils/auth'
 
 export default defineEventHandler(async (event) => {
-  const userId = event.context.userId
+  const auth = requireAuth(event)
 
-  if (!userId) {
-    throw createError({
-      statusCode: 401,
-      message: 'Não autenticado'
-    })
-  }
-
-  // Buscar usuário
   const user = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: auth.userId },
     select: {
       id: true,
       email: true,
@@ -21,7 +14,8 @@ export default defineEventHandler(async (event) => {
       active: true,
       student: {
         select: {
-          id: true
+          id: true,
+          teacherId: true
         }
       },
       teacher: {
@@ -39,11 +33,10 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Verificar se o usuário está ativo
   if (!user.active) {
     throw createError({
       statusCode: 403,
-      message: 'Seu usuário está bloqueado, favor entrar em contato'
+      message: 'Usuário bloqueado'
     })
   }
 
@@ -53,6 +46,8 @@ export default defineEventHandler(async (event) => {
     name: user.name,
     role: user.role,
     active: user.active,
+    student: user.student,
+    teacher: user.teacher,
     studentId: user.student?.id,
     teacherId: user.teacher?.id
   }

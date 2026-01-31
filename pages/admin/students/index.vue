@@ -188,8 +188,27 @@ const filters = ref({
   search: ''
 })
 
-// Buscar alunos
-const { data: students } = await useFetch('/api/students')
+const students = ref([])
+
+// Buscar alunos no cliente
+onMounted(async () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    navigateTo('/')
+    return
+  }
+
+  try {
+    const response = await $fetch('/api/students', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    students.value = response
+  } catch (error) {
+    console.error('Erro ao buscar alunos:', error)
+  }
+})
 
 const filteredStudents = computed(() => {
   if (!students.value) return []

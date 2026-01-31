@@ -28,6 +28,7 @@
                 Alunos
               </NuxtLink>
               <NuxtLink 
+                v-if="user?.role === 'ADMIN'"
                 to="/admin/teachers" 
                 class="border-transparent hover:border-gray-300 text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 active-class="border-blue-500 text-gray-900"
@@ -42,6 +43,7 @@
                 Treinos
               </NuxtLink>
               <NuxtLink 
+                v-if="user?.role === 'ADMIN'"
                 to="/admin/payments" 
                 class="border-transparent hover:border-gray-300 text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 active-class="border-blue-500 text-gray-900"
@@ -101,6 +103,7 @@
             Alunos
           </NuxtLink>
           <NuxtLink 
+            v-if="user?.role === 'ADMIN'"
             to="/admin/teachers" 
             @click="mobileMenuOpen = false"
             class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
@@ -117,6 +120,7 @@
             Treinos
           </NuxtLink>
           <NuxtLink 
+            v-if="user?.role === 'ADMIN'"
             to="/admin/payments" 
             @click="mobileMenuOpen = false"
             class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
@@ -137,6 +141,7 @@
 
 <script setup lang="ts">
 const mobileMenuOpen = ref(false)
+const { user } = useAuthUser()
 
 const handleLogout = () => {
   // Remover token e dados do usuário

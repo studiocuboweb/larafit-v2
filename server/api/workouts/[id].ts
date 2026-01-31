@@ -1,6 +1,6 @@
 import prisma from '../../utils/prisma'
+import { requireAuth, requireTeacherOrAdmin, canAccessStudent } from '../../utils/auth'
 
-// API de treino por ID
 export default defineEventHandler(async (event) => {
   const method = event.method
   const id = getRouterParam(event, 'id')
@@ -12,7 +12,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // GET /api/workouts/:id - Buscar treino específico
+  const auth = requireAuth(event)
+
   if (method === 'GET') {
     const workout = await prisma.workout.findUnique({
       where: { id },
@@ -44,11 +45,41 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Verificar acesso
+    const hasAccess = await canAccessStudent(auth, workout.studentId)
+    if (!hasAccess) {
+      throw createError({
+        statusCode: 403,
+        message: 'Acesso negado'
+      })
+    }
+
     return workout
   }
 
-  // PUT /api/workouts/:id - Atualizar treino
   if (method === 'PUT') {
+    requireTeacherOrAdmin(event)
+    
+    const existingWorkout = await prisma.workout.findUnique({
+      where: { id },
+      select: { studentId: true }
+    })
+
+    if (!existingWorkout) {
+      throw createError({
+        statusCode: 404,
+        message: 'Workout not found'
+      })
+    }
+
+    const hasAccess = await canAccessStudent(auth, existingWorkout.studentId)
+    if (!hasAccess) {
+      throw createError({
+        statusCode: 403,
+        message: 'Acesso negado'
+      })
+    }
+    
     const body = await readBody(event)
     
     const workout = await prisma.workout.update({
@@ -70,8 +101,29 @@ export default defineEventHandler(async (event) => {
     return workout
   }
 
-  // DELETE /api/workouts/:id - Deletar treino
   if (method === 'DELETE') {
+    requireTeacherOrAdmin(event)
+    
+    const existingWorkout = await prisma.workout.findUnique({
+      where: { id },
+      select: { studentId: true }
+    })
+
+    if (!existingWorkout) {
+      throw createError({
+        statusCode: 404,
+        message: 'Workout not found'
+      })
+    }
+
+    const hasAccess = await canAccessStudent(auth, existingWorkout.studentId)
+    if (!hasAccess) {
+      throw createError({
+        statusCode: 403,
+        message: 'Acesso negado'
+      })
+    }
+
     await prisma.workout.delete({
       where: { id }
     })
@@ -81,3 +133,4 @@ export default defineEventHandler(async (event) => {
 
   return { error: 'Method not allowed' }
 })
+

@@ -1,6 +1,6 @@
 import prisma from '../../utils/prisma'
+import { requireAuth, canAccessStudent, requireTeacherOrAdmin } from '../../utils/auth'
 
-// API de aluno por ID
 export default defineEventHandler(async (event) => {
   const method = event.method
   const id = getRouterParam(event, 'id')
@@ -12,7 +12,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // GET /api/students/:id - Buscar aluno específico
+  const auth = requireAuth(event)
+
   if (method === 'GET') {
     const student = await prisma.student.findUnique({
       where: { id },
@@ -23,6 +24,11 @@ export default defineEventHandler(async (event) => {
             name: true,
             email: true,
             active: true
+          }
+        },
+        teacher: {
+          include: {
+            user: { select: { name: true } }
           }
         }
       }
@@ -35,36 +41,73 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const hasAccess = await canAccessStudent(auth, id)
+    if (!hasAccess) {
+      throw createError({
+        statusCode: 403,
+        message: 'Acesso negado'
+      })
+    }
+
     return student
   }
 
-  // PUT /api/students/:id - Atualizar aluno
   if (method === 'PUT') {
+    requireTeacherOrAdmin(event)
+    
+    const hasAccess = await canAccessStudent(auth, id)
+    if (!hasAccess) {
+      throw createError({
+        statusCode: 403,
+        message: 'Acesso negado'
+      })
+    }
+    
     const body = await readBody(event)
+    
+    const updateData: any = {
+      phone: body.phone,
+      birthDate: body.birthDate ? new Date(body.birthDate) : null,
+      observations: body.observations,
+      user: {
+        update: {
+          name: body.name,
+          active: body.active
+        }
+      }
+    }
+
+    if (auth.role === 'ADMIN' && body.teacherId) {
+      updateData.teacherId = body.teacherId
+    }
     
     const student = await prisma.student.update({
       where: { id },
-      data: {
-        phone: body.phone,
-        birthDate: body.birthDate ? new Date(body.birthDate) : null,
-        observations: body.observations,
-        user: {
-          update: {
-            name: body.name,
-            active: body.active
+      data: updateData,
+      include: {
+        user: true,
+        teacher: {
+          include: {
+            user: { select: { name: true } }
           }
         }
-      },
-      include: {
-        user: true
       }
     })
 
     return student
   }
 
-  // DELETE /api/students/:id - Deletar aluno
   if (method === 'DELETE') {
+    requireTeacherOrAdmin(event)
+    
+    const hasAccess = await canAccessStudent(auth, id)
+    if (!hasAccess) {
+      throw createError({
+        statusCode: 403,
+        message: 'Acesso negado'
+      })
+    }
+
     await prisma.student.delete({
       where: { id }
     })

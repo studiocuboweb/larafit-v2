@@ -2,7 +2,10 @@
   <div class="px-4 sm:px-6 lg:px-8 py-8">
     <div class="max-w-4xl mx-auto">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Meus Treinos</h1>
+        <h1 class="text-3xl font-bold text-gray-900">
+          <span v-if="user">Olá, {{ user.name.split(' ')[0] }}! 👋</span>
+          <span v-else>Meus Treinos</span>
+        </h1>
         <p class="mt-2 text-sm text-gray-700">Seus treinos ativos e prontos para executar</p>
       </div>
 
@@ -137,11 +140,14 @@ definePageMeta({
 
 const { formatDate } = useFormatters()
 
-// Pegar ID do aluno logado
-const user = useState('user')
+// Pegar dados do usuário logado
+const { user, fetchUser } = useAuthUser()
+
+onMounted(() => {
+  fetchUser()
+})
+
 const studentId = computed(() => {
-  // Assumindo que temos o studentId no estado do usuário
-  // Se não tiver, buscar pela API usando o userId
   return user.value?.student?.id
 })
 

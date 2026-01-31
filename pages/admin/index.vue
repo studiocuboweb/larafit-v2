@@ -141,14 +141,32 @@
 </template>
 
 <script setup lang="ts">
-// Buscar estatísticas da API
-const { data: stats, pending } = await useFetch('/api/stats/dashboard')
-
-// Dados padrão enquanto carrega
-const displayStats = computed(() => stats.value || {
+const stats = ref({
   students: 0,
   teachers: 0,
   workouts: 0,
   revenue: 0
 })
+
+// Buscar estatísticas no cliente
+onMounted(async () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    navigateTo('/')
+    return
+  }
+
+  try {
+    const response = await $fetch('/api/stats/dashboard', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    stats.value = response
+  } catch (error) {
+    console.error('Erro ao buscar estatísticas:', error)
+  }
+})
+
+const displayStats = computed(() => stats.value)
 </script>
