@@ -67,6 +67,24 @@
             />
           </div>
 
+          <!-- Professor -->
+          <div>
+            <label for="teacher" class="block text-sm font-medium text-gray-700">
+              Professor *
+            </label>
+            <select
+              id="teacher"
+              v-model="form.teacherId"
+              required
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
+            >
+              <option value="">Selecione um professor</option>
+              <option v-for="teacher in teachers" :key="teacher.id" :value="teacher.id">
+                {{ teacher.user.name }}
+              </option>
+            </select>
+          </div>
+
           <!-- Telefone -->
           <div>
             <label for="phone" class="block text-sm font-medium text-gray-700">
@@ -161,11 +179,13 @@ const form = ref({
   password: '',
   phone: '',
   birthDate: '',
+  teacherId: '',
   active: true,
   observations: ''
 })
 
 const phoneDisplay = ref('')
+const teachers = ref([])
 
 const handlePhoneInput = (event: Event) => {
   const input = event.target as HTMLInputElement
@@ -183,6 +203,14 @@ onMounted(async () => {
   if (isEditing.value) {
     try {
       const token = localStorage.getItem('token')
+
+      const teacherResponse = await $fetch('/api/teachers', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      teachers.value = teacherResponse
+
       const response = await $fetch(`/api/students/${studentId}`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -196,6 +224,7 @@ onMounted(async () => {
           password: '',
           phone: response.phone || '',
           birthDate: response.birthDate ? new Date(response.birthDate).toISOString().split('T')[0] : '',
+          teacherId: response.teacherId || '',
           active: response.user.active,
           observations: response.observations || ''
         }
@@ -228,6 +257,7 @@ const handleSubmit = async () => {
         },
         body: {
           name: form.value.name,
+          teacherId: form.value.teacherId,
           phone: form.value.phone,
           birthDate: form.value.birthDate || null,
           active: form.value.active,
@@ -264,6 +294,7 @@ const handleSubmit = async () => {
         },
         body: {
           userId: userData.id,
+          teacherId: form.value.teacherId,
           phone: form.value.phone,
           birthDate: form.value.birthDate || null,
           observations: form.value.observations
