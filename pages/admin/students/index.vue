@@ -135,6 +135,9 @@
                       Telefone
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      Professor
+                    </th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                       Status
                     </th>
                     <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -152,6 +155,11 @@
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {{ formatPhone(student.phone) }}
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {{ student.teacher?.user?.name || 'N/A' }}
+                      </span>
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       <span :class="[
