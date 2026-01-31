@@ -53,7 +53,22 @@
             </div>
           </div>
           
-          <div class="flex items-center">
+          <div class="flex items-center space-x-4">
+            <!-- User Info -->
+            <div v-if="user" class="hidden sm:flex items-center space-x-2 text-sm">
+              <div class="text-right">
+                <p class="font-medium text-gray-900">{{ user.name }}</p>
+                <p class="text-xs text-gray-500">
+                  <span v-if="user.role === 'ADMIN'" class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Admin</span>
+                  <span v-else-if="user.role === 'TEACHER'" class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Professor</span>
+                  <span v-else-if="user.role === 'STUDENT'" class="bg-green-100 text-green-800 px-2 py-0.5 rounded">Aluno</span>
+                </p>
+              </div>
+              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                {{ user.name.charAt(0).toUpperCase() }}
+              </div>
+            </div>
+            
             <!-- Mobile menu button -->
             <button 
               @click="mobileMenuOpen = !mobileMenuOpen" 
@@ -74,7 +89,7 @@
             <!-- Logout button -->
             <button 
               @click="handleLogout" 
-              class="ml-3 bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Sair
             </button>

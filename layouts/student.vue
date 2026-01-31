@@ -12,7 +12,18 @@
           
           <div class="flex items-center">
             <!-- Desktop Menu -->
-            <div class="hidden sm:flex sm:items-center sm:space-x-4">
+            <div class="hidden sm:flex sm:items-center sm:space-x-6">
+              <!-- User Info -->
+              <div v-if="user" class="flex items-center space-x-3 border-r border-blue-500 pr-6">
+                <div class="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+                  {{ user.name.charAt(0).toUpperCase() }}
+                </div>
+                <div class="text-right">
+                  <p class="text-sm font-medium text-white">{{ user.name }}</p>
+                  <p class="text-xs text-blue-100">Aluno</p>
+                </div>
+              </div>
+              
               <NuxtLink 
                 to="/student/workouts" 
                 class="text-white hover:text-blue-100 px-3 py-2 rounded-md text-sm font-medium"
