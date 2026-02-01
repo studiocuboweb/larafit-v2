@@ -20,8 +20,7 @@
           </div>
           <div class="mt-4 sm:mt-0">
             <NuxtLink
-              to="/admin/workouts/new"
-              :query="{ studentId: studentId }"
+              :to="`/admin/workouts/create/${studentId}`"
               class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
             >
               + Novo Treino
@@ -175,8 +174,7 @@
           <p class="mt-1 text-sm text-gray-500">Comece criando um novo treino para este aluno.</p>
           <div class="mt-6">
             <NuxtLink
-              to="/admin/workouts/new"
-              :query="{ studentId: studentId }"
+              :to="`/admin/workouts/create/${studentId}`"
               class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
             >
               + Novo Treino
