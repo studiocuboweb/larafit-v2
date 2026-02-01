@@ -226,8 +226,8 @@ const handleSubmit = async () => {
       body: payload
     })
 
-    // Redirecionar para a lista de treinos do aluno
-    await navigateTo(`/admin/students/${studentId}/workouts`)
+    // Redirecionar para a página de edição do treino criado para adicionar exercícios
+    await navigateTo(`/admin/workouts/${workout.id}/edit`)
   } catch (err: any) {
     console.error('Erro ao criar treino:', err)
     error.value = err.data?.message || err.message || 'Erro ao criar treino. Tente novamente.'
