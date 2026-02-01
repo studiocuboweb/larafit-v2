@@ -19,12 +19,20 @@
             <p class="mt-2 text-sm text-gray-700">Gerencie os treinos deste aluno</p>
           </div>
           <div class="mt-4 sm:mt-0">
-            <NuxtLink
-              :to="`/admin/workouts/create/${studentId}`"
-              class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
-            >
-              + Novo Treino
-            </NuxtLink>
+            <div class="flex flex-wrap gap-2">
+              <button
+                @click="openCopyModal"
+                class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Copiar Treino
+              </button>
+              <NuxtLink
+                :to="`/admin/workouts/create/${studentId}`"
+                class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+              >
+                + Novo Treino
+              </NuxtLink>
+            </div>
           </div>
         </div>
         <div v-else class="sm:flex sm:items-center sm:justify-between">
@@ -172,7 +180,13 @@
           </svg>
           <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhum treino cadastrado</h3>
           <p class="mt-1 text-sm text-gray-500">Comece criando um novo treino para este aluno.</p>
-          <div class="mt-6">
+          <div class="mt-6 flex flex-wrap justify-center gap-2">
+            <button
+              @click="openCopyModal"
+              class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              Copiar Treino
+            </button>
             <NuxtLink
               :to="`/admin/workouts/create/${studentId}`"
               class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
@@ -180,6 +194,86 @@
               + Novo Treino
             </NuxtLink>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Copiar Treino -->
+    <div v-if="showCopyModal" class="fixed inset-0 z-50 flex items-center justify-center">
+      <div class="absolute inset-0 bg-black/50" @click="closeCopyModal"></div>
+      <div class="relative w-full max-w-xl rounded-lg bg-white p-6 shadow-lg">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Copiar treino existente</h3>
+            <p class="text-sm text-gray-600">Selecione um treino que você já criou e associe a este aluno.</p>
+          </div>
+          <button
+            @click="closeCopyModal"
+            class="text-gray-400 hover:text-gray-600"
+            aria-label="Fechar"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div class="mt-4 space-y-4">
+          <div>
+            <label for="copyWorkout" class="block text-sm font-medium text-gray-700">Treino</label>
+            <select
+              id="copyWorkout"
+              v-model="copyForm.workoutId"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
+            >
+              <option value="">Selecione um treino</option>
+              <option v-for="workout in availableWorkouts" :key="workout.id" :value="workout.id">
+                {{ workout.name }} — {{ workout.student?.user?.name || 'Aluno' }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="copyName" class="block text-sm font-medium text-gray-700">Nome do novo treino (opcional)</label>
+            <input
+              id="copyName"
+              v-model="copyForm.name"
+              type="text"
+              placeholder="Ex: Treino A - Peito e Tríceps"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
+            />
+          </div>
+
+          <div>
+            <label for="copyStatus" class="block text-sm font-medium text-gray-700">Status</label>
+            <select
+              id="copyStatus"
+              v-model="copyForm.status"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
+            >
+              <option value="DRAFT">Rascunho</option>
+              <option value="ACTIVE">Ativo</option>
+              <option value="INACTIVE">Inativo</option>
+            </select>
+          </div>
+
+          <div v-if="copyError" class="rounded-md bg-red-50 p-3 text-sm text-red-700">
+            {{ copyError }}
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-2">
+          <button
+            @click="closeCopyModal"
+            class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          >
+            Cancelar
+          </button>
+          <button
+            @click="handleCopyWorkout"
+            :disabled="copyLoading"
+            class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+          >
+            {{ copyLoading ? 'Copiando...' : 'Copiar Treino' }}
+          </button>
         </div>
       </div>
     </div>
@@ -197,6 +291,15 @@ const { formatDate } = useFormatters()
 
 const student = ref<any>(null)
 const workouts = ref<any[]>([])
+const availableWorkouts = ref<any[]>([])
+const showCopyModal = ref(false)
+const copyLoading = ref(false)
+const copyError = ref('')
+const copyForm = ref({
+  workoutId: '',
+  name: '',
+  status: 'DRAFT'
+})
 
 const loadData = async () => {
   try {
@@ -218,9 +321,69 @@ const loadData = async () => {
   }
 }
 
+const loadAvailableWorkouts = async () => {
+  try {
+    const token = localStorage.getItem('token')
+    const data = await $fetch('/api/workouts', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    availableWorkouts.value = Array.isArray(data) ? data : []
+  } catch (error) {
+    console.error('Erro ao carregar treinos disponíveis:', error)
+    availableWorkouts.value = []
+  }
+}
+
 onMounted(async () => {
   await loadData()
 })
+
+const openCopyModal = async () => {
+  copyError.value = ''
+  copyForm.value = { workoutId: '', name: '', status: 'DRAFT' }
+  showCopyModal.value = true
+  await loadAvailableWorkouts()
+}
+
+const closeCopyModal = () => {
+  showCopyModal.value = false
+}
+
+const handleCopyWorkout = async () => {
+  if (!copyForm.value.workoutId) {
+    copyError.value = 'Selecione um treino para copiar.'
+    return
+  }
+
+  try {
+    copyLoading.value = true
+    copyError.value = ''
+    const token = localStorage.getItem('token')
+    const payload: any = {
+      studentId,
+      status: copyForm.value.status
+    }
+    if (copyForm.value.name?.trim()) payload.name = copyForm.value.name.trim()
+
+    const newWorkout = await $fetch(`/api/workouts/${copyForm.value.workoutId}/copy`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: payload
+    })
+
+    showCopyModal.value = false
+    await loadData()
+    await navigateTo(`/admin/workouts/${newWorkout.id}/edit`)
+  } catch (error: any) {
+    copyError.value = error?.data?.message || 'Erro ao copiar treino.'
+  } finally {
+    copyLoading.value = false
+  }
+}
 
 // Estatísticas
 const activeWorkouts = computed(() => {
