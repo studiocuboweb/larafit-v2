@@ -545,8 +545,12 @@ const getGroupLabel = (groupId: string) => {
 const updateWorkout = async () => {
   try {
     savingWorkout.value = true
+    const token = localStorage.getItem('token')
     await $fetch(`/api/workouts/${workoutId}`, {
       method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       body: workoutForm.value
     })
     await loadWorkout()
@@ -593,17 +597,24 @@ const closeExerciseModal = () => {
 const saveExercise = async () => {
   try {
     savingExercise.value = true
+    const token = localStorage.getItem('token')
 
     if (editingExercise.value) {
       // Editar
       await $fetch(`/api/exercises/${editingExercise.value.id}`, {
         method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
         body: exerciseForm.value
       })
     } else {
       // Criar
       await $fetch(`/api/workouts/${workoutId}/exercises`, {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
         body: exerciseForm.value
       })
     }
@@ -619,8 +630,12 @@ const saveExercise = async () => {
 
 const addFromLibrary = async (template: any) => {
   try {
+    const token = localStorage.getItem('token')
     await $fetch(`/api/workouts/${workoutId}/exercises`, {
       method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       body: {
         name: template.name,
         sets: template.defaultSets,
@@ -641,7 +656,13 @@ const addFromLibrary = async (template: any) => {
 const confirmDeleteExercise = async (exercise: any) => {
   if (confirm(`Excluir "${exercise.name}"?`)) {
     try {
-      await $fetch(`/api/exercises/${exercise.id}`, { method: 'DELETE' })
+      const token = localStorage.getItem('token')
+      await $fetch(`/api/exercises/${exercise.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       await loadWorkout()
     } catch (error) {
       alert('Erro ao excluir exercício')
@@ -651,8 +672,12 @@ const confirmDeleteExercise = async (exercise: any) => {
 
 const moveExercise = async (exerciseId: string, direction: 'up' | 'down') => {
   try {
+    const token = localStorage.getItem('token')
     const data = await $fetch(`/api/exercises/${exerciseId}/reorder`, {
       method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       body: { direction }
     })
     exercises.value = data
@@ -669,8 +694,12 @@ const groupSelected = async () => {
   }
 
   try {
+    const token = localStorage.getItem('token')
     await $fetch(`/api/exercises/${selectedExercises.value[0]}/group`, {
       method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       body: { exerciseIds: selectedExercises.value }
     })
     selectedExercises.value = []
@@ -682,8 +711,12 @@ const groupSelected = async () => {
 
 const ungroupExercise = async (exerciseId: string) => {
   try {
+    const token = localStorage.getItem('token')
     await $fetch(`/api/exercises/${exerciseId}/group`, {
       method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       body: { ungroup: true }
     })
     await loadWorkout()
