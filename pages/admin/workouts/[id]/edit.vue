@@ -469,7 +469,12 @@ const libraryFilters = ref({
 
 // Buscar dados iniciais
 const loadWorkout = async () => {
-  const data = await $fetch(`/api/workouts/${workoutId}`)
+  const token = localStorage.getItem('token')
+  const data = await $fetch(`/api/workouts/${workoutId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
   workout.value = data
   exercises.value = data.exercises || []
   
@@ -483,7 +488,12 @@ const loadWorkout = async () => {
 }
 
 const loadLibrary = async () => {
-  const data = await $fetch('/api/exercises/library')
+  const token = localStorage.getItem('token')
+  const data = await $fetch('/api/exercises/library', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
   libraryExercises.value = data.exercises
   libraryCategories.value = data.categories
   libraryEquipment.value = data.equipmentTypes
