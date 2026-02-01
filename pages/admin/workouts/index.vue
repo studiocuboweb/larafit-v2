@@ -246,9 +246,22 @@ const filters = ref({
 })
 
 // Buscar dados
-const { data: workouts, refresh } = await useFetch('/api/workouts')
-const { data: students } = await useFetch('/api/students')
-const { data: teachers } = await useFetch('/api/teachers')
+const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null
+const { data: workouts, refresh } = await useFetch('/api/workouts', {
+  headers: token ? {
+    Authorization: `Bearer ${token}`
+  } : {}
+})
+const { data: students } = await useFetch('/api/students', {
+  headers: token ? {
+    Authorization: `Bearer ${token}`
+  } : {}
+})
+const { data: teachers } = await useFetch('/api/teachers', {
+  headers: token ? {
+    Authorization: `Bearer ${token}`
+  } : {}
+})
 
 const filteredWorkouts = computed(() => {
   if (!workouts.value) return []
@@ -282,7 +295,13 @@ const statusLabel = (status: string) => {
 const confirmDelete = async (workout: any) => {
   if (confirm(`Tem certeza que deseja excluir o treino "${workout.name}"?`)) {
     try {
-      await $fetch(`/api/workouts/${workout.id}`, { method: 'DELETE' })
+      const token = localStorage.getItem('token')
+      await $fetch(`/api/workouts/${workout.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       refresh()
     } catch (error) {
       alert('Erro ao excluir treino')
@@ -297,7 +316,13 @@ watch(filters, async (newFilters) => {
   if (newFilters.studentId) query.studentId = newFilters.studentId
   if (newFilters.teacherId) query.teacherId = newFilters.teacherId
   
-  const { data } = await useFetch('/api/workouts', { query })
+  const token = localStorage.getItem('token')
+  const { data } = await useFetch('/api/workouts', {
+    query,
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
   if (data.value) workouts.value = data.value
 }, { deep: true })
 </script>
