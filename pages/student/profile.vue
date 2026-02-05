@@ -1,7 +1,6 @@
 <template>
-  <NuxtLayout name="student">
-    <div class="min-h-screen bg-gray-50">
-      <div class="max-w-4xl mx-auto px-4 py-6">
+  <div class="min-h-screen bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 py-6">
         <!-- Header -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
           <h1 class="text-2xl font-bold text-gray-900 mb-2">Meu Perfil</h1>
@@ -104,15 +103,18 @@
         </div>
       </div>
     </div>
-  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-const { data: session } = useAuth()
+definePageMeta({
+  layout: 'student'
+})
+
+const { user, fetchUser } = useAuthUser()
 
 const form = ref({
-  name: session.value?.user?.name || '',
-  email: session.value?.user?.email || '',
+  name: '',
+  email: '',
   phone: ''
 })
 
@@ -124,6 +126,16 @@ const passwordForm = ref({
 
 const saving = ref(false)
 const savingPassword = ref(false)
+
+onMounted(async () => {
+  await fetchUser()
+  
+  if (user.value) {
+    form.value.name = user.value.name || ''
+    form.value.email = user.value.email || ''
+    form.value.phone = user.value.student?.phone || ''
+  }
+})
 
 const saveProfile = async () => {
   saving.value = true
