@@ -47,7 +47,7 @@
           </select>
         </div>
 
-        <div>
+        <div v-if="isAdmin">
           <label for="filterTeacher" class="block text-sm font-medium text-gray-700">Professor</label>
           <select
             id="filterTeacher"
@@ -238,6 +238,9 @@ definePageMeta({
 })
 
 const { formatDate } = useFormatters()
+const { user, fetchUser } = useAuthUser()
+
+const isAdmin = computed(() => user.value?.role === 'ADMIN')
 
 const filters = ref({
   status: '',
@@ -261,6 +264,12 @@ const { data: teachers } = await useFetch('/api/teachers', {
   headers: token ? {
     Authorization: `Bearer ${token}`
   } : {}
+})
+
+onMounted(async () => {
+  if (!user.value) {
+    await fetchUser()
+  }
 })
 
 const filteredWorkouts = computed(() => {
@@ -314,7 +323,7 @@ watch(filters, async (newFilters) => {
   const query: any = {}
   if (newFilters.status) query.status = newFilters.status
   if (newFilters.studentId) query.studentId = newFilters.studentId
-  if (newFilters.teacherId) query.teacherId = newFilters.teacherId
+  if (isAdmin.value && newFilters.teacherId) query.teacherId = newFilters.teacherId
   
   const token = localStorage.getItem('token')
   const { data } = await useFetch('/api/workouts', {
