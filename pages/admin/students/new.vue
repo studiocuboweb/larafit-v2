@@ -67,7 +67,7 @@
           </div>
 
           <!-- Professor -->
-          <div>
+          <div v-if="currentUser?.role === 'ADMIN'">
             <label for="teacher" class="block text-sm font-medium text-gray-700">
               Professor *
             </label>
@@ -184,6 +184,7 @@ const teachers = ref([])
 const loading = ref(false)
 const error = ref('')
 const success = ref('')
+const currentUser = ref(null)
 
 const handlePhoneInput = (event: Event) => {
   const input = event.target as HTMLInputElement
@@ -192,19 +193,33 @@ const handlePhoneInput = (event: Event) => {
   form.value.phone = masked.replace(/\D/g, '') // Salva apenas números
 }
 
-// Buscar lista de professores
+// Buscar usuário atual e lista de professores
 onMounted(async () => {
   try {
     const token = localStorage.getItem('token')
-    const response = await $fetch('/api/teachers', {
-      headers: {
-        Authorization: `Bearer ${token}`
+    const userString = localStorage.getItem('user')
+    
+    if (userString) {
+      currentUser.value = JSON.parse(userString)
+      
+      // Se for professor, já define o teacherId automaticamente
+      if (currentUser.value.role === 'TEACHER') {
+        form.value.teacherId = currentUser.value.teacherId
       }
-    })
-    teachers.value = response
+    }
+    
+    // Apenas buscar lista de professores se for admin
+    if (currentUser.value?.role === 'ADMIN') {
+      const response = await $fetch('/api/teachers', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      teachers.value = response
+    }
   } catch (err) {
-    console.error('Erro ao buscar professores:', err)
-    error.value = 'Erro ao carregar lista de professores'
+    console.error('Erro ao buscar dados:', err)
+    error.value = 'Erro ao carregar dados'
   }
 })
 
