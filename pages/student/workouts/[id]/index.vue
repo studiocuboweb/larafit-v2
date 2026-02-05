@@ -236,7 +236,25 @@ const route = useRoute()
 const router = useRouter()
 const { formatDate } = useFormatters()
 
-const { data: workout } = await useFetch(`/api/workouts/${route.params.id}`)
+const workout = ref(null)
+
+// Buscar treino com token
+onMounted(async () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    navigateTo('/')
+    return
+  }
+
+  try {
+    const response = await $fetch(`/api/workouts/${route.params.id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    workout.value = response
+  } catch (error) {
+    console.error('Erro ao buscar treino:', error)
+  }
+})
 
 // Pegar ID do aluno logado
 const getUserData = () => {
@@ -370,6 +388,13 @@ const saveAndExit = async () => {
     return
   }
   
+  const token = localStorage.getItem('token')
+  if (!token) {
+    alert('Sessão expirada. Faça login novamente.')
+    saving.value = false
+    return
+  }
+  
   try {
     // Salvar execuções no banco
     for (let i = 0; i < workout.value.exercises.length; i++) {
@@ -377,6 +402,7 @@ const saveAndExit = async () => {
       if (isCompleted === true) {
         await $fetch('/api/executions', {
           method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
           body: {
             exerciseId: workout.value.exercises[i].id,
             studentId: studentId.value,
