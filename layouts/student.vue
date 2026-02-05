@@ -32,6 +32,13 @@
                 Meus Treinos
               </NuxtLink>
               <NuxtLink 
+                to="/student/history" 
+                class="text-white hover:text-blue-100 px-3 py-2 rounded-md text-sm font-medium"
+                active-class="bg-blue-700"
+              >
+                Histórico
+              </NuxtLink>
+              <NuxtLink 
                 to="/student/profile" 
                 class="text-white hover:text-blue-100 px-3 py-2 rounded-md text-sm font-medium"
                 active-class="bg-blue-700"
@@ -76,6 +83,14 @@
             Meus Treinos
           </NuxtLink>
           <NuxtLink 
+            to="/student/history" 
+            @click="mobileMenuOpen = false"
+            class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium"
+            active-class="bg-blue-700"
+          >
+            Histórico
+          </NuxtLink>
+          <NuxtLink 
             to="/student/profile" 
             @click="mobileMenuOpen = false"
             class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium"
@@ -101,7 +116,12 @@
 </template>
 
 <script setup lang="ts">
+const { user, fetchUser } = useAuthUser()
 const mobileMenuOpen = ref(false)
+
+onMounted(() => {
+  fetchUser()
+})
 
 const handleLogout = () => {
   // Remover token e dados do usuário
