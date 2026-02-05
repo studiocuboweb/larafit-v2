@@ -143,24 +143,33 @@ const { formatDate } = useFormatters()
 // Pegar dados do usuário logado
 const { user, fetchUser } = useAuthUser()
 
-onMounted(() => {
-  fetchUser()
-})
-
-const studentId = computed(() => {
-  return user.value?.student?.id
-})
-
 const statusFilter = ref('ACTIVE')
+const workouts = ref([])
+const executions = ref([])
 
-// Buscar treinos do aluno
-const { data: workouts } = await useFetch('/api/workouts', {
-  query: { studentId: studentId.value }
-})
+onMounted(async () => {
+  await fetchUser()
+  
+  const token = localStorage.getItem('token')
+  if (!token) {
+    navigateTo('/')
+    return
+  }
 
-// Buscar execuções recentes para mostrar última execução
-const { data: executions } = await useFetch('/api/executions', {
-  query: { studentId: studentId.value }
+  try {
+    const [workoutsResponse, executionsResponse] = await Promise.all([
+      $fetch('/api/workouts', {
+        headers: { Authorization: `Bearer ${token}` }
+      }),
+      $fetch('/api/executions', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+    ])
+    workouts.value = workoutsResponse
+    executions.value = executionsResponse
+  } catch (error) {
+    console.error('Erro ao buscar treinos:', error)
+  }
 })
 
 const filteredWorkouts = computed(() => {
