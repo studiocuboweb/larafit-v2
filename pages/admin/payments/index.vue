@@ -231,11 +231,51 @@ const filters = ref({
   studentId: ''
 })
 
-// Buscar dados com filtros
-const { data: payments, refresh: refreshPayments } = await useFetch('/api/payments', {
-  query: filters
+const payments = ref([])
+const students = ref([])
+
+// Buscar dados no cliente
+onMounted(async () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    navigateTo('/')
+    return
+  }
+
+  try {
+    const [paymentsResponse, studentsResponse] = await Promise.all([
+      $fetch('/api/payments', {
+        headers: { Authorization: `Bearer ${token}` }
+      }),
+      $fetch('/api/students', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+    ])
+    payments.value = paymentsResponse
+    students.value = studentsResponse
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error)
+  }
 })
-const { data: students } = await useFetch('/api/students')
+
+const refreshPayments = async () => {
+  const token = localStorage.getItem('token')
+  if (!token) return
+
+  try {
+    const queryParams = new URLSearchParams()
+    if (filters.value.status) queryParams.append('status', filters.value.status)
+    if (filters.value.studentId) queryParams.append('studentId', filters.value.studentId)
+    
+    const url = `/api/payments${queryParams.toString() ? '?' + queryParams.toString() : ''}`
+    const response = await $fetch(url, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    payments.value = response
+  } catch (error) {
+    console.error('Erro ao buscar pagamentos:', error)
+  }
+}
 
 const filteredPayments = computed(() => {
   if (!payments.value) return []
@@ -277,14 +317,22 @@ const clearFilters = () => {
 }
 
 const markAsPaid = async (paymentId: string) => {
-  await useFetch(`/api/payments/${paymentId}`, {
-    method: 'PUT',
-    body: {
-      status: 'PAID',
-      paymentDate: new Date().toISOString()
-    }
-  })
-  refreshPayments()
+  const token = localStorage.getItem('token')
+  if (!token) return
+
+  try {
+    await $fetch(`/api/payments/${paymentId}`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body: {
+        status: 'PAID',
+        paymentDate: new Date().toISOString()
+      }
+    })
+    refreshPayments()
+  } catch (error) {
+    console.error('Erro ao atualizar pagamento:', error)
+  }
 }
 
 const formatMonth = (date: string | Date) => {

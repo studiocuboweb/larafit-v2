@@ -1,5 +1,6 @@
 import prisma from '../../utils/prisma'
 import { PaymentStatus } from '@prisma/client'
+import { requireAuth } from '../../utils/auth'
 
 // API de pagamentos
 export default defineEventHandler(async (event) => {
@@ -7,6 +8,17 @@ export default defineEventHandler(async (event) => {
 
   // GET /api/payments - Listar pagamentos
   if (method === 'GET') {
+    let auth
+    try {
+      auth = requireAuth(event)
+    } catch (error) {
+      // Se não houver autenticação, retornar erro
+      throw createError({
+        statusCode: 401,
+        message: 'Autenticação necessária'
+      })
+    }
+    
     const query = getQuery(event)
     const studentId = query.studentId as string | undefined
     const status = query.status as string | undefined
@@ -19,6 +31,14 @@ export default defineEventHandler(async (event) => {
     
     if (status && status in PaymentStatus) {
       whereClause.status = status as PaymentStatus
+    }
+    
+    // Se for professor, filtrar apenas alunos dele
+    if (auth.role === 'TEACHER') {
+      if (!whereClause.student) {
+        whereClause.student = {}
+      }
+      whereClause.student.teacherId = auth.teacherId
     }
 
     const payments = await prisma.payment.findMany({
