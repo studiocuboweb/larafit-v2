@@ -136,7 +136,15 @@ const finishWorkout = async () => {
 
 onMounted(async () => {
   try {
-    const data = await $fetch(`/api/workouts/${route.params.id}`)
+    const token = localStorage.getItem('token')
+    if (!token) {
+      router.push('/')
+      return
+    }
+
+    const data = await $fetch(`/api/workouts/${route.params.id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
     workout.value = data
     timerInterval = setInterval(() => elapsedTime.value++, 1000)
   } catch (error) {
