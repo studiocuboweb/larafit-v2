@@ -157,15 +157,17 @@
                   <span class="font-semibold">Descanso:</span> {{ getExerciseRest(exercise) }}s
                 </div>
                 <div v-if="hasValue(getExerciseVideoUrl(exercise))" class="sm:col-span-2">
-                  <span class="font-semibold">YouTube:</span>
-                  <a
-                    :href="getExerciseVideoUrl(exercise)"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-blue-600 hover:text-blue-800 underline ml-1"
-                  >
-                    Ver video
-                  </a>
+                  <span class="font-semibold">Video:</span>
+                  <div class="mt-2 aspect-video w-full overflow-hidden rounded-lg bg-black">
+                    <iframe
+                      :src="getEmbeddedVideoUrl(getExerciseVideoUrl(exercise))"
+                      class="h-full w-full"
+                      title="Video do exercicio"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
                 </div>
               </div>
 
@@ -479,6 +481,29 @@ const getExerciseRest = (exercise: any) => exercise?.rest
 const getExerciseWeight = (exercise: any) => exercise?.weight
 const getExerciseNotes = (exercise: any) => exercise?.notes ?? exercise?.observations
 const getExerciseVideoUrl = (exercise: any) => exercise?.videoUrl
+const getEmbeddedVideoUrl = (url: string) => {
+  const trimmed = url.trim()
+  if (!trimmed) return ''
+
+  if (trimmed.includes('youtube.com/shorts/')) {
+    const id = trimmed.split('youtube.com/shorts/')[1]?.split(/[?&]/)[0]
+    return id ? `https://www.youtube.com/embed/${id}` : trimmed
+  }
+
+  if (trimmed.includes('youtu.be/')) {
+    const id = trimmed.split('youtu.be/')[1]?.split(/[?&]/)[0]
+    return id ? `https://www.youtube.com/embed/${id}` : trimmed
+  }
+
+  if (trimmed.includes('youtube.com/watch')) {
+    const id = trimmed.split('v=')[1]?.split('&')[0]
+    return id ? `https://www.youtube.com/embed/${id}` : trimmed
+  }
+
+  if (trimmed.includes('youtube.com/embed/')) return trimmed
+
+  return trimmed
+}
 
 // Cleanup
 onUnmounted(() => {
