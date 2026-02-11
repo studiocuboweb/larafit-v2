@@ -82,9 +82,12 @@
                       {{ getGroupLabel(exercise.groupId) }}
                     </span>
                   </div>
-                  <div class="flex items-center gap-4 mt-1 text-sm text-gray-600">
-                    <span>{{ exercise.series }}x{{ exercise.repetitions }}</span>
-                    <span>{{ exercise.rest }}s</span>
+                  <div class="flex items-center flex-wrap gap-4 mt-1 text-sm text-gray-600">
+                    <span v-if="hasValue(getExerciseSets(exercise)) && hasValue(getExerciseReps(exercise))">
+                      {{ getExerciseSets(exercise) }}x{{ getExerciseReps(exercise) }}
+                    </span>
+                    <span v-if="hasValue(getExerciseWeight(exercise))">Peso: {{ getExerciseWeight(exercise) }}</span>
+                    <span v-if="hasValue(getExerciseRest(exercise))">Descanso: {{ getExerciseRest(exercise) }}s</span>
                   </div>
                 </div>
 
@@ -133,10 +136,37 @@
               </div>
 
               <!-- Observações -->
-              <div v-if="exercise.observations" class="mb-4 p-3 bg-blue-50 rounded-lg">
+              <div v-if="hasValue(getExerciseNotes(exercise))" class="mb-4 p-3 bg-blue-50 rounded-lg">
                 <p class="text-sm text-gray-700">
-                  <span class="font-semibold">Observação:</span> {{ exercise.observations }}
+                  <span class="font-semibold">Observação:</span> {{ getExerciseNotes(exercise) }}
                 </p>
+              </div>
+
+              <!-- Detalhes do Exercício -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700 mb-4">
+                <div v-if="hasValue(getExerciseSets(exercise))">
+                  <span class="font-semibold">Séries:</span> {{ getExerciseSets(exercise) }}
+                </div>
+                <div v-if="hasValue(getExerciseReps(exercise))">
+                  <span class="font-semibold">Repetições:</span> {{ getExerciseReps(exercise) }}
+                </div>
+                <div v-if="hasValue(getExerciseWeight(exercise))">
+                  <span class="font-semibold">Peso:</span> {{ getExerciseWeight(exercise) }}
+                </div>
+                <div v-if="hasValue(getExerciseRest(exercise))">
+                  <span class="font-semibold">Descanso:</span> {{ getExerciseRest(exercise) }}s
+                </div>
+                <div v-if="hasValue(getExerciseVideoUrl(exercise))" class="sm:col-span-2">
+                  <span class="font-semibold">YouTube:</span>
+                  <a
+                    :href="getExerciseVideoUrl(exercise)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:text-blue-800 underline ml-1"
+                  >
+                    Ver video
+                  </a>
+                </div>
               </div>
 
               <!-- Notas do Aluno -->
@@ -440,6 +470,15 @@ const getGroupLabel = (groupId: string) => {
   }
   return labels[count] || `SUPERSET (${count})`
 }
+
+const hasValue = (value: unknown) => value !== null && value !== undefined && value !== ''
+
+const getExerciseSets = (exercise: any) => exercise?.sets ?? exercise?.series
+const getExerciseReps = (exercise: any) => exercise?.reps ?? exercise?.repetitions
+const getExerciseRest = (exercise: any) => exercise?.rest
+const getExerciseWeight = (exercise: any) => exercise?.weight
+const getExerciseNotes = (exercise: any) => exercise?.notes ?? exercise?.observations
+const getExerciseVideoUrl = (exercise: any) => exercise?.videoUrl
 
 // Cleanup
 onUnmounted(() => {
