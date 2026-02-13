@@ -160,6 +160,12 @@ npx prisma db push --force-reset
 ### Ver logs da API
 Os logs aparecem automaticamente no terminal onde você rodou `npm run dev`
 
+## 🚀 Deploy em Produção
+
+Para instruções completas de deploy em servidor Ubuntu com Apache, PostgreSQL e Systemd, consulte:
+
+**📄 [DEPLOYMENT.md](DEPLOYMENT.md)** - Guia completo de produção
+
 ---
 
 **Desenvolvido com Nuxt 3 + Prisma + PostgreSQL** 🚀
