@@ -33,7 +33,7 @@
           </div>
         </NuxtLink>
 
-        <NuxtLink to="/admin/teachers" class="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow cursor-pointer">
+        <NuxtLink v-if="isAdmin" to="/admin/teachers" class="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow cursor-pointer">
           <div class="p-5">
             <div class="flex items-center">
               <div class="flex-shrink-0">
@@ -128,7 +128,7 @@
             </div>
           </NuxtLink>
           
-          <NuxtLink to="/admin/teachers/new" class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400">
+          <NuxtLink v-if="isAdmin" to="/admin/teachers/new" class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400">
             <div class="flex-1 min-w-0">
               <span class="absolute inset-0" aria-hidden="true"></span>
               <p class="text-sm font-medium text-gray-900">Novo Professor</p>
@@ -141,6 +141,10 @@
 </template>
 
 <script setup lang="ts">
+const { user, fetchUser } = useAuthUser()
+
+const isAdmin = computed(() => user.value?.role === 'ADMIN')
+
 const stats = ref({
   students: 0,
   teachers: 0,
@@ -150,6 +154,10 @@ const stats = ref({
 
 // Buscar estatísticas no cliente
 onMounted(async () => {
+  if (!user.value) {
+    await fetchUser()
+  }
+
   const token = localStorage.getItem('token')
   if (!token) {
     navigateTo('/')
