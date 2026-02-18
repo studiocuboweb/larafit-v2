@@ -141,10 +141,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'admin'
-})
-
 const route = useRoute()
 const router = useRouter()
 const studentId = route.params.studentId as string

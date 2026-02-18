@@ -281,10 +281,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'admin'
-})
-
 const route = useRoute()
 const studentId = route.params.id as string
 const { formatDate } = useFormatters()

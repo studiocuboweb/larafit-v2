@@ -233,10 +233,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'admin'
-})
-
 const { formatDate } = useFormatters()
 const { user, fetchUser } = useAuthUser()
 

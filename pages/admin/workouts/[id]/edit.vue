@@ -421,9 +421,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'admin'
-})
 
 const route = useRoute()
 const workoutId = route.params.id as string

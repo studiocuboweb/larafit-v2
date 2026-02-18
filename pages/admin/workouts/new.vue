@@ -162,9 +162,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'admin'
-})
 
 const router = useRouter()
 
