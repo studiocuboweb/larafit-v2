@@ -44,15 +44,33 @@ User (Usuário base)
 npm install
 ```
 
-### 2. Configurar Banco de Dados
+### 2. Subir o Banco de Dados com Docker (recomendado)
 
-Edite o arquivo `.env` com suas credenciais do PostgreSQL:
+Este projeto já vem com PostgreSQL pronto no arquivo `docker-compose.yml`.
 
-```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/larafit?schema=public"
+```bash
+# subir o container em segundo plano
+docker compose up -d
+
+# verificar se está rodando
+docker compose ps
 ```
 
-### 3. Criar o Banco de Dados
+Se quiser acompanhar os logs do banco:
+
+```bash
+docker compose logs -f postgres
+```
+
+### 3. Configurar Banco de Dados no `.env`
+
+Edite (ou crie) o arquivo `.env` na raiz do projeto com a URL abaixo:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/larafit?schema=public"
+```
+
+### 4. Criar as tabelas no banco
 
 ```bash
 # Gerar o Prisma Client
@@ -65,13 +83,19 @@ npx prisma db push
 npx prisma studio
 ```
 
-### 4. Rodar o Projeto
+### 5. Rodar o Projeto
 
 ```bash
 npm run dev
 ```
 
 O projeto estará disponível em: http://localhost:3000
+
+### 6. Parar o banco (quando terminar)
+
+```bash
+docker compose down
+```
 
 ## 📁 Estrutura do Projeto
 
@@ -154,7 +178,13 @@ npx prisma studio
 
 ### Reset do banco
 ```bash
+# opção rápida com Prisma
 npx prisma db push --force-reset
+
+# opção completa com Docker (apaga volume e todos os dados)
+docker compose down -v
+docker compose up -d
+npx prisma db push
 ```
 
 ### Ver logs da API
