@@ -83,7 +83,17 @@ npx prisma db push
 npx prisma studio
 ```
 
-### 5. Rodar o Projeto
+### 5. Popular o banco com dados iniciais (seed)
+
+Para facilitar o primeiro acesso, rode o seed:
+
+```bash
+npx prisma db seed
+```
+
+Esse comando cria usuários de teste (admin, professores, alunos), treinos e exercícios.
+
+### 6. Rodar o Projeto
 
 ```bash
 npm run dev
@@ -91,7 +101,17 @@ npm run dev
 
 O projeto estará disponível em: http://localhost:3000
 
-### 6. Parar o banco (quando terminar)
+### 7. Primeiro login (usuários seed)
+
+Use uma destas contas:
+
+- **Admin**: `admin@larafit.com` / `admin123`
+- **Professor**: `joao.silva@larafit.com` / `professor123`
+- **Aluno**: `carlos@email.com` / `aluno123`
+
+> Observação: no ambiente atual de desenvolvimento, as senhas do seed são comparadas em texto puro.
+
+### 8. Parar o banco (quando terminar)
 
 ```bash
 docker compose down
