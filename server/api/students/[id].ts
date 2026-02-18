@@ -64,21 +64,30 @@ export default defineEventHandler(async (event) => {
     }
     
     const body = await readBody(event)
+    const userUpdateData: any = {
+      name: body.name,
+      active: body.active
+    }
+
+    if (typeof body.password === 'string' && body.password.trim()) {
+      userUpdateData.password = body.password.trim()
+    }
     
     const updateData: any = {
       phone: body.phone,
       birthDate: body.birthDate ? new Date(body.birthDate) : null,
       observations: body.observations,
       user: {
-        update: {
-          name: body.name,
-          active: body.active
-        }
+        update: userUpdateData
       }
     }
 
     if (auth.role === 'ADMIN' && body.teacherId) {
-      updateData.teacherId = body.teacherId
+      updateData.teacher = {
+        connect: {
+          id: body.teacherId
+        }
+      }
     }
     
     const student = await prisma.student.update({

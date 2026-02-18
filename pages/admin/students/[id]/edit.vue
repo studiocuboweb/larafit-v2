@@ -67,6 +67,20 @@
             />
           </div>
 
+          <!-- Nova Senha (edição) -->
+          <div v-else>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              Nova Senha (opcional)
+            </label>
+            <input
+              id="password"
+              v-model="form.password"
+              type="password"
+              placeholder="Deixe em branco para manter a senha atual"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
+            />
+          </div>
+
           <!-- Professor -->
           <div>
             <label for="teacher" class="block text-sm font-medium text-gray-700">
@@ -257,6 +271,7 @@ const handleSubmit = async () => {
         },
         body: {
           name: form.value.name,
+          password: form.value.password?.trim() || undefined,
           teacherId: form.value.teacherId,
           phone: form.value.phone,
           birthDate: form.value.birthDate || null,
