@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
   // PUT - Atualizar professor
   if (method === 'PUT') {
     const body = await readBody(event)
-    const { name, active, specialties, cref, phone } = body
+    const { name, active, specialties, cref, phone, password } = body
 
     // Usar transação para atualizar tanto User quanto Teacher
     const updatedTeacher = await prisma.$transaction(async (tx) => {
@@ -83,12 +83,18 @@ export default defineEventHandler(async (event) => {
       })
 
       // Atualizar dados do user
+      const userUpdateData: any = {
+        name,
+        active
+      }
+
+      if (typeof password === 'string' && password.trim()) {
+        userUpdateData.password = password.trim()
+      }
+
       await tx.user.update({
         where: { id: teacher.userId },
-        data: {
-          name,
-          active
-        }
+        data: userUpdateData
       })
 
       // Retornar professor atualizado com user
