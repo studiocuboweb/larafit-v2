@@ -238,34 +238,49 @@ const { user, fetchUser } = useAuthUser()
 
 const isAdmin = computed(() => user.value?.role === 'ADMIN')
 
+const workouts = ref<any[]>([])
+const students = ref<any[]>([])
+const teachers = ref<any[]>([])
+
 const filters = ref({
   status: '',
   studentId: '',
   teacherId: ''
 })
 
-// Buscar dados
-const token = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null
-const { data: workouts, refresh } = await useFetch('/api/workouts', {
-  headers: token ? {
-    Authorization: `Bearer ${token}`
-  } : {}
-})
-const { data: students } = await useFetch('/api/students', {
-  headers: token ? {
-    Authorization: `Bearer ${token}`
-  } : {}
-})
-const { data: teachers } = await useFetch('/api/teachers', {
-  headers: token ? {
-    Authorization: `Bearer ${token}`
-  } : {}
-})
+const getAuthHeaders = (): Record<string, string> => {
+  if (!process.client) return {}
+  const token = localStorage.getItem('token')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+const loadWorkouts = async (query: Record<string, string> = {}) => {
+  const data = await $fetch<any[]>('/api/workouts', {
+    query,
+    headers: getAuthHeaders()
+  })
+  workouts.value = Array.isArray(data) ? data : []
+}
+
+const loadInitialData = async () => {
+  const headers: Record<string, string> = getAuthHeaders()
+  const [workoutsData, studentsData, teachersData] = await Promise.all([
+    $fetch<any[]>('/api/workouts', { headers }),
+    $fetch<any[]>('/api/students', { headers }),
+    $fetch<any[]>('/api/teachers', { headers })
+  ])
+
+  workouts.value = Array.isArray(workoutsData) ? workoutsData : []
+  students.value = Array.isArray(studentsData) ? studentsData : []
+  teachers.value = Array.isArray(teachersData) ? teachersData : []
+}
 
 onMounted(async () => {
   if (!user.value) {
     await fetchUser()
   }
+
+  await loadInitialData()
 })
 
 const filteredWorkouts = computed(() => {
@@ -300,14 +315,11 @@ const statusLabel = (status: string) => {
 const confirmDelete = async (workout: any) => {
   if (confirm(`Tem certeza que deseja excluir o treino "${workout.name}"?`)) {
     try {
-      const token = localStorage.getItem('token')
       await $fetch(`/api/workouts/${workout.id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        headers: getAuthHeaders()
       })
-      refresh()
+      await loadWorkouts()
     } catch (error) {
       alert('Erro ao excluir treino')
     }
@@ -316,18 +328,13 @@ const confirmDelete = async (workout: any) => {
 
 // Watch filters and update query
 watch(filters, async (newFilters) => {
+  if (!process.client) return
+
   const query: any = {}
   if (newFilters.status) query.status = newFilters.status
   if (newFilters.studentId) query.studentId = newFilters.studentId
   if (isAdmin.value && newFilters.teacherId) query.teacherId = newFilters.teacherId
-  
-  const token = localStorage.getItem('token')
-  const { data } = await useFetch('/api/workouts', {
-    query,
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  if (data.value) workouts.value = data.value
+
+  await loadWorkouts(query)
 }, { deep: true })
 </script>
