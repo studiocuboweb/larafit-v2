@@ -53,8 +53,8 @@
               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
             >
               <option value="">Selecione um aluno</option>
-              <option v-for="student in students" :key="student.id" :value="student.id">
-                {{ student.user.name }} - {{ student.user.email }}
+              <option v-for="student in studentOptions" :key="student.id" :value="student.id">
+                {{ getStudentLabel(student) }}
               </option>
             </select>
           </div>
@@ -64,17 +64,16 @@
             <label for="teacherId" class="block text-sm font-medium text-gray-700">
               Professor *
             </label>
-            <select
+            <input
               id="teacherId"
-              v-model="form.teacherId"
-              required
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 px-3 py-2 border"
-            >
-              <option value="">Selecione um professor</option>
-              <option v-for="teacher in teachers" :key="teacher.id" :value="teacher.id">
-                {{ teacher.user.name }}
-              </option>
-            </select>
+              :value="selectedTeacherName"
+              type="text"
+              disabled
+              class="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 text-gray-700 shadow-sm px-3 py-2 border"
+            />
+            <p class="mt-1 text-sm text-gray-500">
+              O professor é definido automaticamente com base no aluno selecionado.
+            </p>
           </div>
 
           <!-- Status -->
@@ -164,6 +163,7 @@
 <script setup lang="ts">
 
 const router = useRouter()
+const { user, fetchUser } = useAuthUser()
 
 const form = ref({
   name: '',
@@ -178,9 +178,46 @@ const form = ref({
 const loading = ref(false)
 const error = ref('')
 
-// Buscar alunos e professores
-const { data: students } = await useFetch('/api/students')
-const { data: teachers } = await useFetch('/api/teachers')
+// Buscar alunos
+const studentOptions = ref<any[]>([])
+
+const getAuthHeaders = (): Record<string, string> => {
+  if (!process.client) return {}
+  const token = localStorage.getItem('token')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
+onMounted(async () => {
+  if (!user.value) {
+    await fetchUser()
+  }
+
+  const data = await $fetch<any[]>('/api/students', {
+    headers: getAuthHeaders()
+  })
+  studentOptions.value = Array.isArray(data) ? data : []
+})
+
+const getStudentLabel = (student: any) => {
+  if (user.value?.role === 'ADMIN') {
+    const teacherName = student?.teacher?.user?.name || 'Sem professor'
+    return `${student.user.name} - ${teacherName}`
+  }
+
+  return student.user.name
+}
+
+const selectedStudent = computed(() => {
+  return studentOptions.value.find((student: any) => student.id === form.value.studentId) || null
+})
+
+const selectedTeacherName = computed(() => {
+  return selectedStudent.value?.teacher?.user?.name || 'Selecione um aluno primeiro'
+})
+
+watch(() => form.value.studentId, () => {
+  form.value.teacherId = selectedStudent.value?.teacherId || ''
+})
 
 const handleSubmit = async () => {
   try {
@@ -197,8 +234,9 @@ const handleSubmit = async () => {
       endDate: form.value.endDate || null
     }
 
-    const workout = await $fetch('/api/workouts', {
+    const workout: any = await $fetch('/api/workouts', {
       method: 'POST',
+      headers: getAuthHeaders(),
       body: payload
     })
 

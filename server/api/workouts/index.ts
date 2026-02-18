@@ -69,17 +69,26 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    let teacherId = body.teacherId
-    if (auth.role === 'TEACHER') {
-      teacherId = auth.teacherId
+    const student = await prisma.student.findUnique({
+      where: { id: body.studentId },
+      select: { teacherId: true }
+    })
+
+    if (!student) {
+      throw createError({
+        statusCode: 404,
+        message: 'Aluno não encontrado'
+      })
     }
+
+    const teacherId = student.teacherId
     
     const workout = await prisma.workout.create({
       data: {
         name: body.name,
         description: body.description,
         studentId: body.studentId,
-        teacherId: teacherId || auth.teacherId,
+        teacherId,
         status: body.status || 'ACTIVE',
         startDate: body.startDate ? new Date(body.startDate) : new Date(),
         endDate: body.endDate ? new Date(body.endDate) : null
