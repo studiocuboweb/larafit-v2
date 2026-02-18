@@ -23,6 +23,17 @@
       <!-- Dados do Treino -->
       <div class="bg-white shadow rounded-lg p-6">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Dados do Treino</h2>
+
+        <div
+          v-if="workoutFeedback.message"
+          :class="[
+            'mb-4 rounded-md p-3 text-sm',
+            workoutFeedback.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
+          ]"
+        >
+          {{ workoutFeedback.message }}
+        </div>
+
         <form @submit.prevent="updateWorkout" class="space-y-4">
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
@@ -434,6 +445,11 @@ const savingExercise = ref(false)
 const showExerciseModal = ref(false)
 const showLibraryModal = ref(false)
 const editingExercise = ref<any>(null)
+const workoutFeedback = ref<{ type: 'success' | 'error'; message: string }>({
+  type: 'success',
+  message: ''
+})
+let workoutFeedbackTimeout: ReturnType<typeof setTimeout> | null = null
 
 // Formulários
 const workoutForm = ref({
@@ -543,14 +559,29 @@ const getGroupLabel = (groupId: string) => {
 const updateWorkout = async () => {
   try {
     savingWorkout.value = true
+    workoutFeedback.value.message = ''
+
     await $fetch(`/api/workouts/${workoutId}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: workoutForm.value
     })
     await loadWorkout()
+
+    workoutFeedback.value = {
+      type: 'success',
+      message: 'Treino atualizado com sucesso.'
+    }
+
+    if (workoutFeedbackTimeout) clearTimeout(workoutFeedbackTimeout)
+    workoutFeedbackTimeout = setTimeout(() => {
+      workoutFeedback.value.message = ''
+    }, 3500)
   } catch (error) {
-    alert('Erro ao atualizar treino')
+    workoutFeedback.value = {
+      type: 'error',
+      message: 'Erro ao atualizar treino. Tente novamente.'
+    }
   } finally {
     savingWorkout.value = false
   }
