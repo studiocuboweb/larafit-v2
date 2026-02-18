@@ -74,21 +74,7 @@
 
         <!-- Quick Access (Desenvolvimento) -->
         <div class="mt-6 pt-6 border-t border-gray-200">
-          <p class="text-xs text-center text-gray-500 mb-3">Acesso rápido (desenvolvimento):</p>
-          <div class="grid grid-cols-2 gap-3">
-            <NuxtLink
-              to="/admin"
-              class="text-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Admin
-            </NuxtLink>
-            <NuxtLink
-              to="/student/workouts"
-              class="text-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Aluno
-            </NuxtLink>
-          </div>
+          <p class="text-xs text-center text-gray-500 mb-3">Desenvolvido por <a href="https://studiocuboweb.com.br" class="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Studio Cubo Web</a></p>
         </div>
       </div>
     </div>
