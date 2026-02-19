@@ -2,8 +2,8 @@
   <NuxtLayout name="admin">
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Meu Perfil</h1>
-        <p class="mt-2 text-sm text-gray-700">Atualize seus dados de cadastro e senha</p>
+        <h1 class="text-2xl font-bold text-[#f55139]">Meu Perfil</h1>
+        <p class="mt-2 text-sm text-white">Atualize seus dados de cadastro e senha</p>
       </div>
 
       <div v-if="error" class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-red-700">

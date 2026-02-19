@@ -1,12 +1,17 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-8">
+  <div class="px-4 sm:px-6 lg:px-8 pb-8">
     <div class="max-w-4xl mx-auto">
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">
-          <span v-if="user">Olá, {{ user.name.split(' ')[0] }}! 👋</span>
-          <span v-else>Meus Treinos</span>
-        </h1>
-        <p class="mt-2 text-sm text-gray-700">Seus treinos ativos e prontos para executar</p>
+      <div class="flex items-center justify-center mb-6">
+        <div class="flex items-center">
+          <img class="h-12 w-auto" src="/img/stripes.webp" alt="LaraFit Logo" />
+          <h1 class="text-2xl font-bold text-white">
+            <span v-if="user">Olá, {{ user.name.split(' ')[0] }}! 👋</span>
+            <span v-else>Meus Treinos</span>
+          </h1>
+        </div>
+      </div>
+      <div class="text-center mb-8">
+        <p class="text-sm text-white">Seus treinos ativos e prontos para executar</p>
       </div>
 
       <!-- Filtro de status -->

@@ -1,12 +1,14 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-8">
+  <div class="sm:px-6 lg:px-8 pb-8">
     <div class="max-w-5xl mx-auto">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Histórico de Treinos</h1>
-        <p class="mt-2 text-sm text-gray-700">Veja todos os treinos que você já completou</p>
+      <div class="flex items-center justify-center mb-6">
+        <div class="flex items-center">
+          <img class="h-12 w-auto" src="/img/stripes.webp" alt="LaraFit Logo" />
+          <h1 class="text-2xl font-bold text-white">Histórico de Treinos</h1>
+        </div>
       </div>
-
+      
       <!-- Loading -->
       <div v-if="loading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
