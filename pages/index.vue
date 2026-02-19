@@ -1,15 +1,19 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        <h2 class="mt-6 text-center text-4xl font-extrabold text-white">
-          LaraFit
-        </h2>
-        <p class="mt-2 text-center text-sm text-blue-100">
-          Sistema de Gerenciamento de Academia
-        </p>
+  <div class="min-h-screen bg-[#0f222d] relative overflow-hidden flex items-center justify-center p-4" id="login-page">
+    <div class="absolute top-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-500 opacity-30 blur-[150px] rounded-full"></div>
+    <div class="absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-green-500 opacity-30 blur-[150px] rounded-full"></div>
+    <div class="absolute top-[40%] left-[60%] w-[400px] h-[400px] bg-sky-500 opacity-20 blur-[150px] rounded-full"></div>
+    <div class="max-w-md w-full space-y-8 z-10">
+      <div class="flex items-center justify-center">
+        <div class="flex items-center">
+          <img class="h-12 w-auto" src="/img/stripes.webp" alt="LaraFit Logo" />
+          <h2 class="text-4xl font-extrabold text-white">
+            LaraFit
+          </h2>
+        </div>
       </div>
-      <div class="mt-8 bg-white rounded-lg shadow-2xl p-8">
+  
+      <div class="mt-8 rounded-lg p-8">
         <!-- Mensagem de erro -->
         <div v-if="error" class="mb-4 px-4 py-3 rounded" :class="[
           isBlockedUser ? 'bg-yellow-50 border-2 border-yellow-400 text-yellow-800' : 'bg-red-50 border border-red-200 text-red-700'
@@ -27,7 +31,7 @@
 
         <form class="space-y-6" @submit.prevent="handleLogin">
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">
+            <label for="email" class="block text-sm font-medium text-white">
               Email
             </label>
             <div class="mt-1">
@@ -44,7 +48,7 @@
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">
+            <label for="password" class="block text-sm font-medium text-white">
               Senha
             </label>
             <div class="mt-1">
@@ -64,17 +68,16 @@
             <button
               type="submit"
               :disabled="loading"
-              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span v-if="loading">Entrando...</span>
-              <span v-else>Entrar</span>
+              class="w-full flex justify-center p-2 rounded-full text-xl font-bold text-white uppercase tracking-wider bg-gradient-to-r from-[#0f222d] via-[#00629c] to-[#0f222d] border-2 border-white shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:brightness-110 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed">
+              <span v-if="loading">Iniciando...</span>
+              <span v-else>COMEÇAR</span>
             </button>
           </div>
         </form>
 
         <!-- Quick Access (Desenvolvimento) -->
-        <div class="mt-6 pt-6 border-t border-gray-200">
-          <p class="text-xs text-center text-gray-500 mb-3">Desenvolvido por <a href="https://studiocuboweb.com.br" class="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Studio Cubo Web</a></p>
+        <div class="mt-20 pt-6 border-t border-gray-200">
+          <p class="text-xs text-center text-white mb-3">Desenvolvido por <a href="https://studiocuboweb.com.br" class="text-orange-500 hover:underline" target="_blank" rel="noopener noreferrer">Studio Cubo Web</a></p>
         </div>
       </div>
     </div>
