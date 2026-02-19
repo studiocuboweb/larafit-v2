@@ -57,3 +57,14 @@
     </nav>
   </div>
 </template>
+<script setup lang="ts">
+const handleLogout = () => {
+  // 1. Limpa os dados de autenticação
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  
+  // 2. Redireciona o usuário para a página de login
+  // No Nuxt 3, usamos o navigateTo
+  navigateTo('/')
+}
+</script>
