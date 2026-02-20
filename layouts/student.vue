@@ -14,7 +14,7 @@
     ></div>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-7xl mx-auto pb-6 sm:px-6 z-10">
+    <main class="max-w-7xl mx-auto pb-32 sm:px-6 z-10">
       <slot />
     </main>
 
@@ -22,88 +22,99 @@
     <nav
       class="fixed bottom-0 left-0 right-0 bg-[#0f222d] border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-50"
     >
-      <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
-        <NuxtLink
-          to="/student/workouts"
-          class="flex flex-col items-center justify-center text-white transition-colors"
-          active-class="text-blue-600"
-        >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+      <div class="max-w-md mx-auto flex flex-col">
+        <div class="px-6 h-16 flex items-center justify-between">
+          <NuxtLink
+            to="/student/workouts"
+            class="flex flex-col items-center justify-center text-white transition-colors"
+            active-class="text-blue-600"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-            />
-          </svg>
-          <span class="text-[10px] mt-1 font-medium">Treinos</span>
-        </NuxtLink>
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+              />
+            </svg>
+            <span class="text-[10px] mt-1 font-medium">Treinos</span>
+          </NuxtLink>
 
-        <NuxtLink
-          to="/student/history"
-          class="flex flex-col items-center justify-center text-white transition-colors"
-          active-class="text-blue-600"
-        >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <NuxtLink
+            to="/student/history"
+            class="flex flex-col items-center justify-center text-white transition-colors"
+            active-class="text-blue-600"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <span class="text-[10px] mt-1 font-medium">Histórico</span>
-        </NuxtLink>
-        <NuxtLink
-          to="/student/profile"
-          class="flex flex-col items-center justify-center text-white transition-colors"
-          active-class="text-blue-600"
-        >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span class="text-[10px] mt-1 font-medium">Histórico</span>
+          </NuxtLink>
+          <NuxtLink
+            to="/student/profile"
+            class="flex flex-col items-center justify-center text-white transition-colors"
+            active-class="text-blue-600"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-            />
-          </svg>
-          <span class="text-[10px] mt-1 font-medium">Perfil</span>
-        </NuxtLink>
-        <!-- Sair -->
-        <button
-          @click="handleLogout"
-          class="flex flex-col items-center justify-center text-white hover:text-red-500 transition-colors"
-        >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+            <span class="text-[10px] mt-1 font-medium">Perfil</span>
+          </NuxtLink>
+          <!-- Sair -->
+          <button
+            @click="handleLogout"
+            class="flex flex-col items-center justify-center text-white hover:text-red-500 transition-colors"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          <span class="text-[10px] mt-1 font-medium">Sair</span>
-        </button>
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+            <span class="text-[10px] mt-1 font-medium">Sair</span>
+          </button>
+        </div>
+
+        <div class="bg-black py-1 flex items-center justify-center">
+          <div class="flex items-center justify-center">
+            <div class="flex items-center">
+              <img class="h-5 w-auto" src="/img/stripes.webp" alt="LaraFit Logo" />
+              <h2 class="text-base font-extrabold text-white">LaraFit</h2>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
   </div>
