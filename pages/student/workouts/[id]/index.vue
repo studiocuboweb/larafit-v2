@@ -113,6 +113,24 @@
                   >
                     {{ index + 1 }}
                   </div>
+                  <div
+                    v-if="isExerciseCompleted(index)"
+                    class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0"
+                  >
+                    <svg
+                      class="w-3.5 h-3.5 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2.5"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
                 </div>
 
                 <!-- Info do Exercício -->
@@ -527,7 +545,7 @@ const getExerciseCardClass = (index: number) => {
   const status = getExerciseStatus(index);
   const classes: Record<string, string> = {
     pending: "bg-gray-100 border border-gray-300",
-    completed: "bg-emerald-200 border border-emerald-500",
+    completed: "bg-green-50 border border-green-300",
   };
   return classes[status];
 };
@@ -536,7 +554,7 @@ const getExerciseNumberClass = (index: number) => {
   const status = getExerciseStatus(index);
   const exercise = workout.value?.exercises[index];
 
-  if (status === "completed") return "bg-emerald-600";
+  if (status === "completed") return "bg-green-500";
   return exercise?.groupId ? "bg-purple-400" : "bg-gray-400";
 };
 
