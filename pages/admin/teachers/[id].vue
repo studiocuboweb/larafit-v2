@@ -8,7 +8,7 @@
           </svg>
           Voltar para lista
         </NuxtLink>
-        <h1 class="text-3xl font-bold text-gray-900 mt-2">{{ isEditing ? 'Editar Professor' : 'Novo Professor' }}</h1>
+        <h1 class="text-2xl font-bold text-[#f55139] mt-2">{{ isEditing ? 'Editar Professor' : 'Novo Professor' }}</h1>
       </div>
 
       <!-- Error Message -->

@@ -5,8 +5,8 @@
       <!-- Header -->
       <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-gray-900">{{ workout.name }}</h1>
-          <p class="mt-2 text-sm text-gray-700">
+          <h1 class="text-2xl font-bold text-[#f55139]">{{ workout.name }}</h1>
+          <p class="mt-2 text-sm text-white">
             Aluno: {{ workout.student.user.name }} | Professor: {{ workout.teacher.user.name }}
           </p>
         </div>

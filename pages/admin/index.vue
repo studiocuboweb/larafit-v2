@@ -3,8 +3,8 @@
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-          <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p class="mt-2 text-sm text-gray-700">Visão geral do sistema LaraFit</p>
+          <h1 class="text-2xl font-bold text-[#f55139]">Dashboard</h1>
+          <p class="mt-2 text-sm text-white">Visão geral do sistema LaraFit</p>
         </div>
       </div>
 

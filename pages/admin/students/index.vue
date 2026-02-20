@@ -3,8 +3,8 @@
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
-          <h1 class="text-3xl font-bold text-gray-900">Alunos</h1>
-          <p class="mt-2 text-sm text-gray-700">Lista de todos os alunos cadastrados no sistema</p>
+          <h1 class="text-2xl font-bold text-[#f55139]">Alunos</h1>
+          <p class="mt-2 text-sm text-white">Lista de todos os alunos cadastrados no sistema</p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <NuxtLink

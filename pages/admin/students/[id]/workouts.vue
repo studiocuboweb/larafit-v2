@@ -15,8 +15,8 @@
 
         <div v-if="student" class="sm:flex sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Treinos de {{ student.user.name }}</h1>
-            <p class="mt-2 text-sm text-gray-700">Gerencie os treinos deste aluno</p>
+            <h1 class="text-2xl font-bold text-[#f55139]">Treinos de {{ student.user.name }}</h1>
+            <p class="mt-2 text-sm text-white">Gerencie os treinos deste aluno</p>
           </div>
           <div class="mt-4 sm:mt-0">
             <div class="flex flex-wrap gap-2">
@@ -37,8 +37,8 @@
         </div>
         <div v-else class="sm:flex sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Treinos do aluno</h1>
-            <p class="mt-2 text-sm text-gray-700">Aluno: {{ studentId }}</p>
+            <h1 class="text-2xl font-bold text-[#f55139]">Treinos do aluno</h1>
+            <p class="mt-2 text-sm text-white">Aluno: {{ studentId }}</p>
           </div>
         </div>
       </div>

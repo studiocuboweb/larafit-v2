@@ -1,12 +1,17 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8 py-8">
+  <div class="px-4 sm:px-6 lg:px-8 pb-8">
     <div class="max-w-4xl mx-auto">
-      <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">
-          <span v-if="user">Olá, {{ user.name.split(' ')[0] }}! 👋</span>
-          <span v-else>Meus Treinos</span>
-        </h1>
-        <p class="mt-2 text-sm text-gray-700">Seus treinos ativos e prontos para executar</p>
+      <div class="flex items-center justify-center mb-6">
+        <div class="flex items-center">
+          <img class="h-12 w-auto" src="/img/stripes.webp" alt="LaraFit Logo" />
+          <h1 class="text-2xl font-bold text-white">
+            <span v-if="user">Olá, {{ user.name.split(' ')[0] }}! 👋</span>
+            <span v-else>Meus Treinos</span>
+          </h1>
+        </div>
+      </div>
+      <div class="text-center mb-8">
+        <p class="text-sm text-white">Seus treinos ativos e prontos para executar</p>
       </div>
 
       <!-- Filtro de status -->
@@ -17,7 +22,7 @@
             :class="[
               'px-4 py-2 rounded-md text-sm font-medium transition-colors',
               statusFilter === 'ACTIVE'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#f55139] text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
             ]"
           >
@@ -28,7 +33,7 @@
             :class="[
               'px-4 py-2 rounded-md text-sm font-medium transition-colors',
               statusFilter === 'ALL'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#f55139] text-white'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
             ]"
           >
@@ -45,7 +50,7 @@
           class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
         >
           <!-- Header do card -->
-          <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+          <div class="bg-gradient-to-r from-[#0f222d] to-[#f55139] px-6 py-4">
             <h3 class="text-xl font-bold text-white">{{ workout.name }}</h3>
             <p v-if="workout.description" class="text-blue-100 text-sm mt-1">
               {{ workout.description }}
@@ -107,15 +112,9 @@
           <div class="px-6 py-4 bg-gray-50 flex gap-2">
             <NuxtLink
               :to="`/student/workouts/${workout.id}`"
-              class="flex-1 text-center bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-700 transition-colors"
-            >
-              Ver Treino
-            </NuxtLink>
-            <NuxtLink
-              :to="`/student/workouts/${workout.id}/execute`"
               class="flex-1 text-center bg-green-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-green-700 transition-colors"
             >
-              ▶ Executar
+              Ver Treino
             </NuxtLink>
           </div>
         </div>

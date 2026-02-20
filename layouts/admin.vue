@@ -72,7 +72,7 @@
                   <span v-else-if="user.role === 'STUDENT'" class="bg-green-100 text-green-800 px-2 py-0.5 rounded">Aluno</span>
                 </p>
               </div>
-              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+              <div class="w-8 h-8 bg-gradient-to-r from-[#0f222d] to-[#f55139] rounded-full flex items-center justify-center text-white font-bold">
                 {{ user.name.charAt(0).toUpperCase() }}
               </div>
             </div>
