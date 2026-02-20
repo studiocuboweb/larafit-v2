@@ -120,7 +120,10 @@
             class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
           >
             <!-- Header da Sessão -->
-            <div class="p-2 border-b border-gray-200">
+            <div
+              class="p-2"
+              :class="expandedSessions.has(session.date) ? 'border-b border-gray-200' : ''"
+            >
               <div
                 class="flex flex-col sm:flex-row sm:items-start sm:justify-between"
               >
