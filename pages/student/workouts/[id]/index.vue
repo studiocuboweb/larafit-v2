@@ -1,9 +1,18 @@
 <template>
   <NuxtLayout name="student">
-    <div class="min-h-screen bg-[#0f222d] relative overflow-hidden flex items-center justify-center pb-4" id="login-page">
-      <div class="absolute top-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-500 opacity-30 blur-[150px] rounded-full"></div>
-      <div class="absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-green-500 opacity-30 blur-[150px] rounded-full"></div>
-      <div class="absolute top-[40%] left-[60%] w-[400px] h-[400px] bg-sky-500 opacity-20 blur-[150px] rounded-full"></div>
+    <div
+      class="min-h-screen bg-[#0f222d] relative overflow-hidden flex items-center justify-center pb-4"
+      id="login-page"
+    >
+      <div
+        class="absolute top-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-500 opacity-30 blur-[150px] rounded-full"
+      ></div>
+      <div
+        class="absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-green-500 opacity-30 blur-[150px] rounded-full"
+      ></div>
+      <div
+        class="absolute top-[40%] left-[60%] w-[400px] h-[400px] bg-sky-500 opacity-20 blur-[150px] rounded-full"
+      ></div>
 
       <!-- Loading -->
       <div v-if="!workout" class="text-center py-12">
@@ -15,58 +24,68 @@
 
       <!-- Content -->
       <div v-else class="max-w-4xl mx-auto pb-6 z-10">
-              <NuxtLink
-        to="/student/workouts"
-        class="mb-4 inline-flex items-center justify-center py-1 px-2 bg-[#f55139] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#d43d28] transition-colors group"
-      >
-        <svg class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        Voltar
-      </NuxtLink>
-        <!-- Header com Cronômetro -->
-        <div class="rounded-lg shadow-md p-4 mb-6 sticky top-0 z-10 bg-[#0f222d]">
-  <!-- Linha Superior: Botão Voltar e Título -->
-  <div class="flex flex-col items-center w-full space-y-2 mb-6">
-    <div class="flex items-center justify-center w-full relative">
-      <!-- Botão Voltar (Posicionado à esquerda ou na linha, aqui deixei na linha para centralizar o conjunto) -->
-
-      
-      <h1 class="text-2xl font-bold text-white">{{ workout.name }}</h1>
-    </div>
-    
-    <!-- Exercícios Concluídos (Abaixo do nome) -->
-    <p class="text-sm text-white opacity-80">
-      {{ completedExercises }} de {{ workout.exercises.length }} exercícios
-    </p>
-  </div>
-
-  <!-- Linha Inferior: Cronômetro e Botões -->
-  <div class="flex flex-col items-center justify-center border-t border-white/10 pt-4">
-    <div class="flex items-center space-x-6">
-      <!-- Cronômetro -->
-      <div class="text-4xl font-bold text-white font-mono tracking-wider">
-        {{ formatTimer(elapsedTime) }}
-      </div>
-      
-      <!-- Controles do Cronômetro -->
-      <div class="flex">
-        <button
-          v-if="!timerRunning"
-          @click="startTimer"
-      
-        ><img src="/img/btn-play.webp" alt="Iniciar" />
-        </button>
-        <button
-          v-else
-          @click="pauseTimer"
+        <NuxtLink
+          to="/student/workouts"
+          class="mb-4 inline-flex items-center justify-center py-1 px-2 bg-[#f55139] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#d43d28] transition-colors group"
         >
-          <img src="/img/btn-pause.webp" alt="Pausar" />
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+          <svg
+            class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Voltar
+        </NuxtLink>
+        <!-- Header com Cronômetro -->
+        <div
+          class="rounded-lg shadow-md p-4 mb-6 sticky top-0 z-10 bg-[#0f222d]"
+        >
+          <!-- Linha Superior: Botão Voltar e Título -->
+          <div class="flex flex-col items-center w-full space-y-2 mb-6">
+            <div class="flex items-center justify-center w-full relative">
+              <!-- Botão Voltar (Posicionado à esquerda ou na linha, aqui deixei na linha para centralizar o conjunto) -->
+
+              <h1 class="text-2xl font-bold text-white">{{ workout.name }}</h1>
+            </div>
+
+            <!-- Exercícios Concluídos (Abaixo do nome) -->
+            <p class="text-sm text-white opacity-80">
+              {{ completedExercises }} de
+              {{ workout.exercises.length }} exercícios
+            </p>
+          </div>
+
+          <!-- Linha Inferior: Cronômetro e Botões -->
+          <div
+            class="flex flex-col items-center justify-center border-t border-white/10 pt-4"
+          >
+            <div class="flex items-center space-x-6">
+              <!-- Cronômetro -->
+              <div
+                class="text-4xl font-bold text-white font-mono tracking-wider"
+              >
+                {{ formatTimer(elapsedTime) }}
+              </div>
+
+              <!-- Controles do Cronômetro -->
+              <div class="flex">
+                <button v-if="!timerRunning" @click="startTimer">
+                  <img src="/img/btn-play.webp" alt="Iniciar" />
+                </button>
+                <button v-else @click="pauseTimer">
+                  <img src="/img/btn-pause.webp" alt="Pausar" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Lista de Exercícios -->
         <div class="space-y-4">
@@ -87,7 +106,6 @@
                   >
                     {{ index + 1 }}
                   </div>
-                 
                 </div>
 
                 <!-- Info do Exercício -->
