@@ -1,6 +1,9 @@
 <template>
   <div
-    class="min-h-screen bg-[#0f222d] relative overflow-hidden flex items-center justify-center p-4"
+    :class="[
+      'min-h-screen bg-[#0f222d] relative overflow-hidden',
+      isWorkoutDetailRoute ? 'p-0' : 'flex items-center justify-center p-4',
+    ]"
     id="login-page"
   >
     <div
@@ -14,12 +17,19 @@
     ></div>
 
     <!-- Conteúdo Principal -->
-    <main class="max-w-7xl mx-auto pb-32 sm:px-6 z-10">
+    <main
+      :class="
+        isWorkoutDetailRoute
+          ? 'w-full z-10'
+          : 'max-w-7xl mx-auto pb-32 sm:px-6 z-10'
+      "
+    >
       <slot />
     </main>
 
     <!-- Barra de Navegação Inferior Fixa -->
     <nav
+      v-if="showStudentFooter"
       class="fixed bottom-0 left-0 right-0 bg-[#0f222d] border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-50"
     >
       <div class="max-w-md mx-auto flex flex-col">
@@ -120,6 +130,16 @@
   </div>
 </template>
 <script setup lang="ts">
+const route = useRoute();
+
+const isWorkoutDetailRoute = computed(() => {
+  return /^\/student\/workouts\/[^/]+(?:\/.*)?$/.test(route.path);
+});
+
+const showStudentFooter = computed(() => {
+  return !isWorkoutDetailRoute.value;
+});
+
 const handleLogout = () => {
   // 1. Limpa os dados de autenticação
   localStorage.removeItem("token");
