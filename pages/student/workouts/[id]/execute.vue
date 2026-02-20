@@ -60,7 +60,7 @@
           <button v-if="currentExerciseIndex > 0" @click="previousExercise" class="flex-1 bg-gray-200 text-gray-700 px-6 py-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
             ← Anterior
           </button>
-          <button v-if="currentExerciseIndex < workout.exercises.length - 1" @click="nextExercise" class="flex-1 bg-blue-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg" :disabled="completedSets === 0">
+          <button v-if="currentExerciseIndex < workout.exercises.length - 1" @click="nextExercise" class="flex-1 bg-[#f55139] text-white px-6 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg" :disabled="completedSets === 0">
             Próximo →
           </button>
           <button v-else @click="finishWorkout" class="flex-1 bg-green-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors shadow-lg" :disabled="completedSets === 0">

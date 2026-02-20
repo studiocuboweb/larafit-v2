@@ -164,7 +164,7 @@
                   :class="
                     isExerciseCompleted(index)
                       ? 'bg-gradient-to-br from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700'
-                      : 'bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700'
+                      : 'bg-gradient-to-br from-[#0f222d] to-[#f55139] text-white hover:from-[#0f222d] hover:to-[#f55139]'
                   "
                 >
                   <span

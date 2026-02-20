@@ -1,6 +1,6 @@
 <template>
   <div class="sm:px-6 lg:px-8 pb-8">
-    <div class="max-w-5xl mx-auto">
+    <div class="w-80">
       <!-- Header -->
       <div class="flex items-center justify-center mb-6">
         <div class="flex items-center">
@@ -18,49 +18,62 @@
       <!-- Conteúdo -->
       <div v-else>
         <!-- Estatísticas -->
-        <div v-if="workoutSessions.length > 0" class="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center">
-              <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+ <!-- Layout principal com 3 colunas fixas -->
+<div v-if="workoutSessions.length > 0" class="mb-8 grid grid-cols-3 gap-4">
+    
+    <!-- Card 1: Total de Treinos -->
+    <div class="bg-white rounded-lg shadow p-2">
+        <div class="flex flex-col items-center">
+            <!-- Ícone -->
+            <div class="p-3 rounded-full bg-blue-100 text-green">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-              </div>
-              <div class="ml-4">
-                <p class="text-sm text-gray-500">Total de Treinos</p>
-                <p class="text-2xl font-bold text-gray-900">{{ workoutSessions.length }}</p>
-              </div>
             </div>
-          </div>
-
-          <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center">
-              <div class="p-3 rounded-full bg-green-100 text-green-600">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <div class="ml-4">
-                <p class="text-sm text-gray-500">Exercícios</p>
-                <p class="text-2xl font-bold text-gray-900">{{ totalExercises }}</p>
-              </div>
+            <!-- Bloco de Texto -->
+            <div class="mt-2 text-center"> <!-- Margem superior para separar do ícone e texto centralizado -->
+                <p class="text-sm text-gray-500">Treinos</p>
+                <p class="text-xl font-bold text-gray-900">{{ workoutSessions.length }}</p>
             </div>
-          </div>
-
-          <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-center">
-              <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div class="ml-4">
-                <p class="text-sm text-gray-500">Tempo Total</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatTotalTime(totalDuration) }}</p>
-              </div>
-            </div>
-          </div>
         </div>
+    </div>
+
+    <!-- Card 2: Exercícios -->
+    <div class="bg-white rounded-lg shadow p-2">
+        <div class="flex flex-col items-center">
+            <!-- Ícone -->
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            </div>
+            <!-- Bloco de Texto -->
+            <div class="mt-2 text-center">
+                <p class="text-sm text-gray-500">Exercícios</p>
+                <p class="text-xl font-bold text-gray-900">{{ totalExercises }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3: Tempo Total -->
+    <div class="bg-white rounded-lg shadow p-2">
+        <div class="flex flex-col items-center">
+            <!-- Ícone -->
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <!-- Bloco de Texto -->
+            <div class="mt-2 text-center">
+                <p class="text-sm text-gray-500">Tempo</p>
+                <p class="text-xl font-bold text-gray-900">{{ formatTotalTime(totalDuration) }}</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
         <!-- Lista de Sessões -->
         <div v-if="workoutSessions.length > 0" class="space-y-4">
@@ -70,8 +83,8 @@
             class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
           >
             <!-- Header da Sessão -->
-            <div class="p-6 border-b border-gray-200">
-              <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div class="p-2 border-b border-gray-200">
+              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                 <div class="flex-1 min-w-0">
                   <h3 class="text-lg font-bold text-gray-900">{{ session.workoutName }}</h3>
                   <div class="mt-2 flex flex-wrap items-center gap-4 text-sm text-gray-600">
@@ -113,42 +126,57 @@
             </div>
 
             <!-- Exercícios da Sessão -->
-            <div v-show="expandedSessions.has(session.date)" class="p-6 bg-gray-50">
+            <div v-show="expandedSessions.has(session.date)" class="p-6 bg-cyan-900">
               <div class="space-y-4">
                 <div
                   v-for="(exercise, index) in session.exercises"
                   :key="exercise.id"
-                  class="bg-white rounded-lg p-4 border border-gray-200"
+                  class="rounded-lg p-2 border border-gray-200 bg-white shadow-sm border-green"
                 >
-                  <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
-                    <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold">
-                      {{ index + 1 }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <h4 class="font-semibold text-gray-900">{{ exercise.name }}</h4>
-                      <div class="mt-1 flex flex-wrap items-center gap-3 text-sm text-gray-600">
-                        <span>{{ exercise.setsDone }} séries</span>
-                        <span>•</span>
-                        <span>{{ exercise.reps }} reps</span>
-                        <span>•</span>
-                        <span>{{ exercise.weight }}</span>
-                      </div>
-                      <div v-if="exercise.notes" class="mt-2 p-3 bg-blue-50 rounded-lg">
-                        <p class="text-sm text-gray-700">
-                          <span class="font-semibold text-blue-700">Suas anotações:</span>
-                          {{ exercise.notes }}
-                        </p>
-                      </div>
-                    </div>
-                    <div class="flex-shrink-0 sm:ml-2">
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        Concluído
-                      </span>
-                    </div>
-                  </div>
+                  <div class="flex items-start gap-4">
+  <!-- Coluna 1: O Número (Fixa à esquerda) -->
+  <div class="flex-shrink-0">
+    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-700 font-bold shadow-sm">
+      {{ index + 1 }}
+    </div>
+  </div>
+
+  <!-- Coluna 2: Todo o Conteúdo (Flexível à direita) -->
+  <div class="flex-1 min-w-0">
+    <!-- Linha de Título e Status -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1">
+      <h4 class="font-bold text-gray-900 text-lg leading-tight">{{ exercise.name }}</h4>
+      
+      <!-- Selo de Concluído (Agora dentro da coluna da direita) -->
+      <div class="flex-shrink-0">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          Concluído
+        </span>
+      </div>
+    </div>
+    
+    <!-- Linha de Detalhes Técnicos -->
+    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600">
+      <span class="font-semibold text-gray-800">{{ exercise.setsDone }} séries</span>
+      <span class="text-gray-300">•</span>
+      <span>{{ exercise.reps }} reps</span>
+      <span class="text-gray-300">•</span>
+      <span class="bg-gray-100 px-2 py-0.5 rounded text-xs font-medium">{{ exercise.weight }}</span>
+    </div>
+
+    <!-- Bloco de Anotações -->
+    <div v-if="exercise.notes" class="mt-3 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+      <p class="text-sm text-gray-700">
+        <span class="block font-bold text-blue-800 text-xs uppercase tracking-wider mb-1">Minhas Anotações:</span>
+        {{ exercise.notes }}
+      </p>
+    </div>
+  </div>
+</div>
+
                 </div>
               </div>
             </div>
