@@ -519,8 +519,8 @@ const getExerciseStatus = (index: number): "pending" | "completed" => {
 const getExerciseCardClass = (index: number) => {
   const status = getExerciseStatus(index);
   const classes: Record<string, string> = {
-    pending: "bg-white",
-    completed: "bg-green-50",
+    pending: "bg-gray-100 border border-gray-300",
+    completed: "bg-emerald-200 border border-emerald-500",
   };
   return classes[status];
 };
@@ -529,7 +529,7 @@ const getExerciseNumberClass = (index: number) => {
   const status = getExerciseStatus(index);
   const exercise = workout.value?.exercises[index];
 
-  if (status === "completed") return "bg-green-500";
+  if (status === "completed") return "bg-emerald-600";
   return exercise?.groupId ? "bg-purple-400" : "bg-gray-400";
 };
 
