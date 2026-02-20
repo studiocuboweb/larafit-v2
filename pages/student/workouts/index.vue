@@ -112,15 +112,9 @@
           <div class="px-6 py-4 bg-gray-50 flex gap-2">
             <NuxtLink
               :to="`/student/workouts/${workout.id}`"
-              class="flex-1 text-center bg-[#f55139] text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-blue-700 transition-colors"
-            >
-              Ver Treino
-            </NuxtLink>
-            <NuxtLink
-              :to="`/student/workouts/${workout.id}/execute`"
               class="flex-1 text-center bg-green-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-green-700 transition-colors"
             >
-              ▶ Executar
+              Ver Treino
             </NuxtLink>
           </div>
         </div>
