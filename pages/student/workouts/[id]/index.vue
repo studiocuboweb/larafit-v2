@@ -5,13 +5,13 @@
       id="login-page"
     >
       <div
-        class="absolute top-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-500 opacity-30 blur-[150px] rounded-full"
+        class="pointer-events-none absolute top-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-500 opacity-30 blur-[150px] rounded-full"
       ></div>
       <div
-        class="absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-green-500 opacity-30 blur-[150px] rounded-full"
+        class="pointer-events-none absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-green-500 opacity-30 blur-[150px] rounded-full"
       ></div>
       <div
-        class="absolute top-[40%] left-[60%] w-[400px] h-[400px] bg-sky-500 opacity-20 blur-[150px] rounded-full"
+        class="pointer-events-none absolute top-[40%] left-[60%] w-[400px] h-[400px] bg-sky-500 opacity-20 blur-[150px] rounded-full"
       ></div>
 
       <!-- Loading -->
@@ -23,7 +23,7 @@
       </div>
 
       <!-- Content -->
-      <div v-else class="w-full max-w-4xl mx-auto px-4 pb-6 z-10">
+      <div v-else class="relative z-10 w-full max-w-4xl mx-auto px-4 pb-6">
         <NuxtLink
           to="/student/workouts"
           class="mb-4 inline-flex items-center justify-center py-1 px-2 bg-[#f55139] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#d43d28] transition-colors group"
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Lista de Exercícios -->
-        <div class="space-y-4">
+        <div class="relative z-10 space-y-4">
           <div
             v-for="(exercise, index) in workout.exercises"
             :key="exercise.id"

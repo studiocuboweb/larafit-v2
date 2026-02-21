@@ -7,13 +7,13 @@
     id="login-page"
   >
     <div
-      class="absolute top-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-500 opacity-30 blur-[150px] rounded-full"
+      class="pointer-events-none absolute top-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-500 opacity-30 blur-[150px] rounded-full"
     ></div>
     <div
-      class="absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-green-500 opacity-30 blur-[150px] rounded-full"
+      class="pointer-events-none absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-green-500 opacity-30 blur-[150px] rounded-full"
     ></div>
     <div
-      class="absolute top-[40%] left-[60%] w-[400px] h-[400px] bg-sky-500 opacity-20 blur-[150px] rounded-full"
+      class="pointer-events-none absolute top-[40%] left-[60%] w-[400px] h-[400px] bg-sky-500 opacity-20 blur-[150px] rounded-full"
     ></div>
 
     <!-- Conteúdo Principal -->
