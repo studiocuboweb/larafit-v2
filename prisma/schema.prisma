@@ -163,6 +163,10 @@ model ExerciseExecution {
   studentId   String
   completedAt DateTime @default(now())
   duration    Int      // Duração em segundos
+  trackedDurationSeconds Int? // Tempo cronometrado pelo usuário (play/pause)
+  totalDurationSeconds   Int? // Tempo total da sessão (timestamp início/fim)
+  workoutStartedAt       DateTime? // Início real da sessão de treino
+  workoutFinishedAt      DateTime? // Fim real da sessão de treino
   setsDone    Int      // Quantas séries foram feitas
   notes       String?  @db.Text // Observações do aluno
   createdAt   DateTime @default(now())

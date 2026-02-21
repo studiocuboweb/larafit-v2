@@ -52,13 +52,13 @@
             <div class="flex items-center justify-center w-full relative">
               <!-- Botão Voltar (Posicionado à esquerda ou na linha, aqui deixei na linha para centralizar o conjunto) -->
 
-              <h1 class="text-2xl font-bold text-white">{{ workout.name }}</h1>
+              <h1 class="text-2xl font-bold text-white">{{ workoutName }}</h1>
             </div>
 
             <!-- Exercícios Concluídos (Abaixo do nome) -->
             <p class="text-sm text-white opacity-80">
               {{ completedExercises }} de
-              {{ workout.exercises.length }} exercícios
+              {{ workoutExercises.length }} exercícios
             </p>
           </div>
 
@@ -90,7 +90,7 @@
         <!-- Lista de Exercícios -->
         <div class="relative z-10 space-y-4">
           <div
-            v-for="(exercise, index) in workout.exercises"
+            v-for="(exercise, index) in workoutExercises"
             :key="exercise.id"
             class="rounded-lg shadow-md overflow-hidden transition-all duration-200"
             :class="getExerciseCardClass(index)"
@@ -322,7 +322,7 @@
               <p class="text-sm font-semibold text-white">Progresso</p>
               <p class="text-xs text-white">
                 {{ completedExercises }} /
-                {{ workout?.exercises?.length || 0 }} exercícios
+                {{ workoutExercises.length }} exercícios
               </p>
             </div>
             <div class="flex-1 mx-6">
@@ -382,7 +382,13 @@
 
           <div class="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
             <div class="flex justify-between text-sm">
-              <span class="text-gray-600">Duração:</span>
+              <span class="text-gray-600">Tempo total:</span>
+              <span class="font-semibold text-gray-900">{{
+                formatTimer(totalDurationPreview)
+              }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600">Cronômetro:</span>
               <span class="font-semibold text-gray-900">{{
                 formatTimer(elapsedTime)
               }}</span>
@@ -390,7 +396,7 @@
             <div class="flex justify-between text-sm">
               <span class="text-gray-600">Exercícios:</span>
               <span class="font-semibold text-gray-900"
-                >{{ completedExercises }} / {{ workout.exercises.length }}</span
+                >{{ completedExercises }} / {{ workoutExercises.length }}</span
               >
             </div>
           </div>
@@ -427,6 +433,7 @@ type StoredWorkoutProgress = {
   expandedExercises?: number[];
   exerciseNotes?: Record<string, string>;
   timerRunning?: boolean;
+  sessionStartedAt?: number | null;
   startedAt?: number | null;
   accumulatedSeconds?: number;
   updatedAt?: number;
@@ -434,7 +441,9 @@ type StoredWorkoutProgress = {
 
 const workoutId = computed(() => String(route.params.id));
 
-const workout = ref(null);
+const workout = ref<any>(null);
+const workoutName = computed(() => workout.value?.name || "");
+const workoutExercises = computed<any[]>(() => workout.value?.exercises || []);
 
 // Pegar ID do aluno logado
 const getUserData = () => {
@@ -456,6 +465,7 @@ const showFinishModal = ref(false);
 const saving = ref(false);
 const accumulatedElapsedSeconds = ref(0);
 const workoutStartTimestamp = ref<number | null>(null);
+const workoutSessionStartedAt = ref<number | null>(null);
 const shouldPersistOnUnmount = ref(true);
 
 let timerInterval: NodeJS.Timeout | null = null;
@@ -468,9 +478,18 @@ const completedExercises = computed(() => {
 });
 
 const progressPercentage = computed(() => {
-  if (!workout.value?.exercises?.length) return 0;
+  if (!workoutExercises.value.length) return 0;
   return Math.round(
-    (completedExercises.value / workout.value.exercises.length) * 100
+    (completedExercises.value / workoutExercises.value.length) * 100
+  );
+});
+
+const totalDurationPreview = computed(() => {
+  if (!workoutSessionStartedAt.value) return elapsedTime.value;
+
+  return Math.max(
+    0,
+    Math.floor((Date.now() - workoutSessionStartedAt.value) / 1000)
   );
 });
 
@@ -486,6 +505,7 @@ const saveWorkoutProgress = () => {
     expandedExercises: Array.from(expandedExercises.value),
     exerciseNotes: exerciseNotes.value,
     timerRunning: timerRunning.value,
+    sessionStartedAt: workoutSessionStartedAt.value,
     startedAt: workoutStartTimestamp.value,
     accumulatedSeconds: accumulatedElapsedSeconds.value,
     updatedAt: Date.now(),
@@ -508,10 +528,39 @@ const restoreWorkoutProgress = () => {
   expandedExercises.value = new Set(progress.expandedExercises || []);
   accumulatedElapsedSeconds.value = progress.accumulatedSeconds || 0;
   timerRunning.value = Boolean(progress.timerRunning);
+  workoutSessionStartedAt.value =
+    typeof progress.sessionStartedAt === "number" ? progress.sessionStartedAt : null;
   workoutStartTimestamp.value =
     timerRunning.value && typeof progress.startedAt === "number"
       ? progress.startedAt
       : null;
+};
+
+const ensureWorkoutSessionStarted = () => {
+  if (!workoutSessionStartedAt.value) {
+    workoutSessionStartedAt.value = Date.now();
+    saveWorkoutProgress();
+  }
+};
+
+const getTrackedDurationSeconds = () => {
+  if (timerRunning.value && workoutStartTimestamp.value) {
+    const runningSeconds = Math.floor(
+      (Date.now() - workoutStartTimestamp.value) / 1000
+    );
+    return accumulatedElapsedSeconds.value + Math.max(0, runningSeconds);
+  }
+
+  return accumulatedElapsedSeconds.value;
+};
+
+const getTotalDurationSeconds = (finishedAtMs: number) => {
+  if (!workoutSessionStartedAt.value) return getTrackedDurationSeconds();
+
+  return Math.max(
+    0,
+    Math.floor((finishedAtMs - workoutSessionStartedAt.value) / 1000)
+  );
 };
 
 const recalculateElapsedTime = () => {
@@ -565,6 +614,7 @@ const formatTimer = (seconds: number): string => {
 const startTimer = () => {
   if (timerRunning.value) return;
 
+  ensureWorkoutSessionStarted();
   timerRunning.value = true;
   workoutStartTimestamp.value = Date.now();
   startTimerTicking();
@@ -583,6 +633,8 @@ const pauseTimer = () => {
 
 // Funções de Exercícios
 const toggleExercise = (index: number) => {
+  ensureWorkoutSessionStarted();
+
   if (expandedExercises.value.has(index)) {
     expandedExercises.value.delete(index);
   } else {
@@ -593,6 +645,8 @@ const toggleExercise = (index: number) => {
 };
 
 const toggleExerciseComplete = (exerciseIndex: number) => {
+  ensureWorkoutSessionStarted();
+
   if (isExerciseCompleted(exerciseIndex)) {
     // Reabrir exercício
     delete completedSetsPerExercise.value[exerciseIndex];
@@ -642,6 +696,16 @@ const finishWorkout = () => {
 const saveAndExit = async () => {
   saving.value = true;
 
+  ensureWorkoutSessionStarted();
+
+  const finishedAtMs = Date.now();
+  const trackedDurationSeconds = getTrackedDurationSeconds();
+  const totalDurationSeconds = getTotalDurationSeconds(finishedAtMs);
+  const workoutStartedAtIso = new Date(
+    workoutSessionStartedAt.value || finishedAtMs
+  ).toISOString();
+  const workoutFinishedAtIso = new Date(finishedAtMs).toISOString();
+
   console.log("🔍 Debug - studentId:", studentId.value);
   console.log("🔍 Debug - currentUser:", currentUser);
 
@@ -662,17 +726,21 @@ const saveAndExit = async () => {
 
   try {
     // Salvar execuções no banco
-    for (let i = 0; i < workout.value.exercises.length; i++) {
+    for (let i = 0; i < workoutExercises.value.length; i++) {
       const isCompleted = completedSetsPerExercise.value[i];
       if (isCompleted === true) {
         await $fetch("/api/executions", {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
           body: {
-            exerciseId: workout.value.exercises[i].id,
+            exerciseId: workoutExercises.value[i].id,
             studentId: studentId.value,
-            duration: elapsedTime.value,
-            setsDone: workout.value.exercises[i].sets || 0,
+            duration: trackedDurationSeconds,
+            trackedDurationSeconds,
+            totalDurationSeconds,
+            workoutStartedAt: workoutStartedAtIso,
+            workoutFinishedAt: workoutFinishedAtIso,
+            setsDone: workoutExercises.value[i].sets || 0,
             notes: exerciseNotes.value[i] || null,
           },
         });
@@ -692,14 +760,14 @@ const saveAndExit = async () => {
 
 // Funções de Agrupamento
 const isFirstInGroup = (exercise: any, index: number) => {
-  if (!exercise.groupId || !workout.value) return false;
+  if (!exercise.groupId || !workoutExercises.value.length) return false;
   if (index === 0) return true;
-  return workout.value.exercises[index - 1].groupId !== exercise.groupId;
+  return workoutExercises.value[index - 1].groupId !== exercise.groupId;
 };
 
 const getGroupLabel = (groupId: string) => {
-  if (!workout.value) return "";
-  const count = workout.value.exercises.filter(
+  if (!workoutExercises.value.length) return "";
+  const count = workoutExercises.value.filter(
     (e: any) => e.groupId === groupId
   ).length;
   const labels: Record<number, string> = {
@@ -770,6 +838,7 @@ onMounted(async () => {
     workout.value = response;
 
     restoreWorkoutProgress();
+    ensureWorkoutSessionStarted();
     recalculateElapsedTime();
 
     if (timerRunning.value && workoutStartTimestamp.value) {
