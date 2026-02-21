@@ -1,25 +1,49 @@
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   // Executar apenas no client-side
   if (process.server) return
 
   // Pular verificação na página de login
   if (to.path === '/') return
 
-  // Verificar se há um usuário logado
-  const userString = localStorage.getItem('user')
-  if (!userString) {
-    // Se não houver usuário, redirecionar para login
+  const appStorage = useAppStorage()
+
+  const token = appStorage.getToken()
+  if (!token) {
+    appStorage.clearAuth()
     return navigateTo('/')
   }
 
+  // Verificar se há um usuário logado
+  const storedUser = appStorage.getUser<any>()
+
+  if (!storedUser) {
+    try {
+      const user = await $fetch('/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      if (user.active === false) {
+        appStorage.clearAuth()
+        return navigateTo('/', { replace: true })
+      }
+
+      appStorage.saveUser(user)
+      return
+    } catch {
+      appStorage.clearAuth()
+      return navigateTo('/', { replace: true })
+    }
+  }
+
   try {
-    const user = JSON.parse(userString)
+    const user = storedUser
     
     // Verificar se o usuário está ativo
     if (user.active === false) {
       // Limpar dados e redirecionar
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
+      appStorage.clearAuth()
       
       return navigateTo('/', {
         replace: true
@@ -27,8 +51,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     }
   } catch (err) {
     // Se houver erro ao parsear, limpar e redirecionar
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+    appStorage.clearAuth()
     return navigateTo('/')
   }
 })

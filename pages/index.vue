@@ -97,6 +97,36 @@ const form = ref({
 const loading = ref(false)
 const error = ref('')
 const isBlockedUser = computed(() => error.value.includes('bloqueado'))
+const appStorage = useAppStorage()
+
+const redirectByRole = async (role: string) => {
+  if (role === 'ADMIN' || role === 'TEACHER') {
+    await navigateTo('/admin')
+  } else if (role === 'STUDENT') {
+    await navigateTo('/student/workouts')
+  }
+}
+
+onMounted(async () => {
+  const token = appStorage.getToken()
+  if (!token) return
+
+  loading.value = true
+  try {
+    const me = await $fetch('/api/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    appStorage.saveUser(me as Record<string, unknown>)
+    await redirectByRole((me as any).role)
+  } catch {
+    appStorage.clearAuth()
+  } finally {
+    loading.value = false
+  }
+})
 
 const handleLogin = async () => {
   loading.value = true
@@ -118,17 +148,11 @@ const handleLogin = async () => {
 
     if (data.value) {
       // Salvar token e dados do usuário
-      localStorage.setItem('token', data.value.token)
-      localStorage.setItem('user', JSON.stringify(data.value.user))
+      appStorage.saveToken(data.value.token)
+      appStorage.saveUser(data.value.user as Record<string, unknown>)
       
       // Redirecionar baseado no role
-      if (data.value.user.role === 'ADMIN') {
-        await navigateTo('/admin')
-      } else if (data.value.user.role === 'TEACHER') {
-        await navigateTo('/admin') // Professores também acessam admin
-      } else if (data.value.user.role === 'STUDENT') {
-        await navigateTo('/student/workouts')
-      }
+      await redirectByRole(data.value.user.role)
     }
   } catch (err: any) {
     error.value = err.message || 'Erro ao fazer login'

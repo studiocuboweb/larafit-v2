@@ -420,36 +420,25 @@
 const route = useRoute();
 const router = useRouter();
 const { formatDate } = useFormatters();
+const appStorage = useAppStorage();
+
+type StoredWorkoutProgress = {
+  completedExercises?: number[];
+  expandedExercises?: number[];
+  exerciseNotes?: Record<string, string>;
+  timerRunning?: boolean;
+  startedAt?: number | null;
+  accumulatedSeconds?: number;
+  updatedAt?: number;
+};
+
+const workoutId = computed(() => String(route.params.id));
 
 const workout = ref(null);
 
-// Buscar treino com token
-onMounted(async () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    navigateTo("/");
-    return;
-  }
-
-  try {
-    const response = await $fetch(`/api/workouts/${route.params.id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    workout.value = response;
-  } catch (error) {
-    console.error("Erro ao buscar treino:", error);
-  }
-});
-
 // Pegar ID do aluno logado
 const getUserData = () => {
-  if (process.client) {
-    const userString = localStorage.getItem("user");
-    if (userString) {
-      return JSON.parse(userString);
-    }
-  }
-  return null;
+  return appStorage.getUser<{ studentId?: string }>();
 };
 
 const currentUser = getUserData();
@@ -465,6 +454,8 @@ const elapsedTime = ref(0);
 const timerRunning = ref(false);
 const showFinishModal = ref(false);
 const saving = ref(false);
+const accumulatedElapsedSeconds = ref(0);
+const workoutStartTimestamp = ref<number | null>(null);
 
 let timerInterval: NodeJS.Timeout | null = null;
 
@@ -482,6 +473,84 @@ const progressPercentage = computed(() => {
   );
 });
 
+const getCompletedExerciseIndexes = () => {
+  return Object.keys(completedSetsPerExercise.value)
+    .filter((key) => completedSetsPerExercise.value[parseInt(key)] === true)
+    .map((key) => parseInt(key));
+};
+
+const saveWorkoutProgress = () => {
+  const progress: StoredWorkoutProgress = {
+    completedExercises: getCompletedExerciseIndexes(),
+    expandedExercises: Array.from(expandedExercises.value),
+    exerciseNotes: exerciseNotes.value,
+    timerRunning: timerRunning.value,
+    startedAt: workoutStartTimestamp.value,
+    accumulatedSeconds: accumulatedElapsedSeconds.value,
+    updatedAt: Date.now(),
+  };
+
+  appStorage.saveWorkoutProgress(workoutId.value, progress as Record<string, unknown>);
+};
+
+const restoreWorkoutProgress = () => {
+  const progress = appStorage.getWorkoutProgress<StoredWorkoutProgress>(workoutId.value);
+  if (!progress) return;
+
+  const restoredCompleted: { [key: number]: boolean } = {};
+  (progress.completedExercises || []).forEach((exerciseIndex) => {
+    restoredCompleted[exerciseIndex] = true;
+  });
+
+  completedSetsPerExercise.value = restoredCompleted;
+  exerciseNotes.value = progress.exerciseNotes || {};
+  expandedExercises.value = new Set(progress.expandedExercises || []);
+  accumulatedElapsedSeconds.value = progress.accumulatedSeconds || 0;
+  timerRunning.value = Boolean(progress.timerRunning);
+  workoutStartTimestamp.value =
+    timerRunning.value && typeof progress.startedAt === "number"
+      ? progress.startedAt
+      : null;
+};
+
+const recalculateElapsedTime = () => {
+  if (timerRunning.value && workoutStartTimestamp.value) {
+    const runningSeconds = Math.floor(
+      (Date.now() - workoutStartTimestamp.value) / 1000
+    );
+    elapsedTime.value = accumulatedElapsedSeconds.value + Math.max(0, runningSeconds);
+    return;
+  }
+
+  elapsedTime.value = accumulatedElapsedSeconds.value;
+};
+
+const stopTimerTicking = () => {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+};
+
+const startTimerTicking = () => {
+  stopTimerTicking();
+  recalculateElapsedTime();
+  timerInterval = setInterval(() => {
+    recalculateElapsedTime();
+  }, 1000);
+};
+
+const syncElapsedTimeFromRunningTimer = () => {
+  if (!timerRunning.value || !workoutStartTimestamp.value) return;
+
+  const runningSeconds = Math.floor(
+    (Date.now() - workoutStartTimestamp.value) / 1000
+  );
+  accumulatedElapsedSeconds.value += Math.max(0, runningSeconds);
+  workoutStartTimestamp.value = Date.now();
+  recalculateElapsedTime();
+};
+
 // Funções do Timer
 const formatTimer = (seconds: number): string => {
   const h = Math.floor(seconds / 3600);
@@ -493,20 +562,22 @@ const formatTimer = (seconds: number): string => {
 };
 
 const startTimer = () => {
-  if (!timerRunning.value) {
-    timerRunning.value = true;
-    timerInterval = setInterval(() => {
-      elapsedTime.value++;
-    }, 1000);
-  }
+  if (timerRunning.value) return;
+
+  timerRunning.value = true;
+  workoutStartTimestamp.value = Date.now();
+  startTimerTicking();
+  saveWorkoutProgress();
 };
 
 const pauseTimer = () => {
+  if (!timerRunning.value) return;
+
+  syncElapsedTimeFromRunningTimer();
   timerRunning.value = false;
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
+  workoutStartTimestamp.value = null;
+  stopTimerTicking();
+  saveWorkoutProgress();
 };
 
 // Funções de Exercícios
@@ -516,6 +587,8 @@ const toggleExercise = (index: number) => {
   } else {
     expandedExercises.value.add(index);
   }
+
+  saveWorkoutProgress();
 };
 
 const toggleExerciseComplete = (exerciseIndex: number) => {
@@ -530,6 +603,8 @@ const toggleExerciseComplete = (exerciseIndex: number) => {
       startTimer();
     }
   }
+
+  saveWorkoutProgress();
 };
 
 const isExerciseCompleted = (exerciseIndex: number): boolean => {
@@ -577,7 +652,7 @@ const saveAndExit = async () => {
     return;
   }
 
-  const token = localStorage.getItem("token");
+  const token = appStorage.getToken();
   if (!token) {
     alert("Sessão expirada. Faça login novamente.");
     saving.value = false;
@@ -603,6 +678,7 @@ const saveAndExit = async () => {
       }
     }
 
+    appStorage.clearWorkoutProgress(workoutId.value);
     router.push("/student/workouts");
   } catch (error) {
     console.error("Erro ao salvar:", error);
@@ -669,6 +745,35 @@ const getEmbeddedVideoUrl = (url: string) => {
 
 // Cleanup
 onUnmounted(() => {
-  if (timerInterval) clearInterval(timerInterval);
+  stopTimerTicking();
+  saveWorkoutProgress();
+});
+
+watch(exerciseNotes, () => {
+  saveWorkoutProgress();
+}, { deep: true });
+
+onMounted(async () => {
+  const token = appStorage.getToken();
+  if (!token) {
+    navigateTo("/");
+    return;
+  }
+
+  try {
+    const response = await $fetch(`/api/workouts/${route.params.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    workout.value = response;
+
+    restoreWorkoutProgress();
+    recalculateElapsedTime();
+
+    if (timerRunning.value && workoutStartTimestamp.value) {
+      startTimerTicking();
+    }
+  } catch (error) {
+    console.error("Erro ao buscar treino:", error);
+  }
 });
 </script>
