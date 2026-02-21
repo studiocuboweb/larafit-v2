@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="student">
     <div
-      class="min-h-screen bg-[#0f222d] relative overflow-hidden flex items-center justify-center pb-4"
+      class="min-h-screen bg-[#0f222d] relative overflow-hidden pb-4"
       id="login-page"
     >
       <div
@@ -23,7 +23,7 @@
       </div>
 
       <!-- Content -->
-      <div v-else class="max-w-4xl mx-auto pb-6 z-10">
+      <div v-else class="w-full max-w-4xl mx-auto px-4 pb-6 z-10">
         <NuxtLink
           to="/student/workouts"
           class="mb-4 inline-flex items-center justify-center py-1 px-2 bg-[#f55139] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#d43d28] transition-colors group"
