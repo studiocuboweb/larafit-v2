@@ -51,6 +51,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
+  const tokenExpiresIn = user.role === 'STUDENT' ? '180d' : '7d'
+
   // Gerar token JWT
   const token = jwt.sign(
     {
@@ -61,7 +63,7 @@ export default defineEventHandler(async (event) => {
       teacherId: user.teacher?.id
     },
     JWT_SECRET,
-    { expiresIn: '7d' }
+    { expiresIn: tokenExpiresIn }
   )
 
   // Retornar dados do usuário (sem senha) e token
