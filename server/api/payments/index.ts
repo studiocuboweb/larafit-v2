@@ -1,6 +1,8 @@
 import prisma from '../../utils/prisma'
-import { PaymentStatus } from '@prisma/client'
+import prismaPkg from '@prisma/client'
 import { requireAuth } from '../../utils/auth'
+
+const { PaymentStatus } = prismaPkg
 
 // API de pagamentos
 export default defineEventHandler(async (event) => {
