@@ -84,13 +84,6 @@
                 </button>
               </div>
             </div>
-            <button
-              @click="finishWorkout"
-              :disabled="completedExercises === 0"
-              class="mt-4 w-full sm:w-auto bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              ✓ Finalizar Treino
-            </button>
           </div>
         </div>
 
@@ -316,12 +309,12 @@
         </div>
 
         <!-- Espaço para o footer fixo -->
-        <div class="h-20"></div>
+        <div class="h-44"></div>
       </div>
 
       <!-- Footer Fixo -->
       <div
-        class="fixed bottom-0 left-0 right-0 bg-[#0f222d] border-t border-gray-200 shadow-lg z-20"
+        class="fixed bottom-0 left-0 right-0 bg-[#0f222d] border-t border-gray-200 shadow-lg z-40"
       >
         <div class="max-w-4xl mx-auto px-4 py-4">
           <div class="flex items-center justify-between mb-3">
@@ -340,6 +333,19 @@
                 ></div>
               </div>
             </div>
+          </div>
+          <button
+            @click="finishWorkout"
+            :disabled="completedExercises === 0"
+            class="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            ✓ Finalizar Treino
+          </button>
+        </div>
+        <div class="bg-black py-1 flex items-center justify-center">
+          <div class="flex items-center">
+            <img class="h-5 w-auto" src="/img/stripes.webp" alt="LaraFit Logo" />
+            <h2 class="text-base font-extrabold text-white">LaraFit</h2>
           </div>
         </div>
       </div>
