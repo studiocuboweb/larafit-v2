@@ -456,6 +456,7 @@ const showFinishModal = ref(false);
 const saving = ref(false);
 const accumulatedElapsedSeconds = ref(0);
 const workoutStartTimestamp = ref<number | null>(null);
+const shouldPersistOnUnmount = ref(true);
 
 let timerInterval: NodeJS.Timeout | null = null;
 
@@ -678,6 +679,7 @@ const saveAndExit = async () => {
       }
     }
 
+    shouldPersistOnUnmount.value = false;
     appStorage.clearWorkoutProgress(workoutId.value);
     router.push("/student/workouts");
   } catch (error) {
@@ -746,6 +748,7 @@ const getEmbeddedVideoUrl = (url: string) => {
 // Cleanup
 onUnmounted(() => {
   stopTimerTicking();
+  if (!shouldPersistOnUnmount.value) return;
   saveWorkoutProgress();
 });
 
