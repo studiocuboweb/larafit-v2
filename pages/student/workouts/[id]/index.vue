@@ -26,7 +26,7 @@
       <div v-else class="relative z-10 w-full max-w-4xl mx-auto px-4 pb-6">
         <NuxtLink
           to="/student/workouts"
-          class="mb-4 inline-flex items-center justify-center py-1 px-2 bg-[#f55139] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#d43d28] transition-colors group"
+          class="mt-2 mb-4 inline-flex items-center justify-center py-1 px-2 bg-[#f55139] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#d43d28] transition-colors group"
         >
           <svg
             class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform"
