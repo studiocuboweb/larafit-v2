@@ -341,13 +341,6 @@
               </div>
             </div>
           </div>
-          <button
-            @click="finishWorkout"
-            :disabled="completedExercises === 0"
-            class="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            ✓ Finalizar Treino
-          </button>
         </div>
       </div>
 
