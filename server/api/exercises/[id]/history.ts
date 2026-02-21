@@ -46,7 +46,12 @@ export default defineEventHandler(async (event) => {
   const stats = {
     totalExecutions: history.length,
     averageDuration: history.length > 0 
-      ? Math.round(history.reduce((sum, ex) => sum + ex.duration, 0) / history.length)
+      ? Math.round(
+          history.reduce(
+            (sum, ex) => sum + (ex.trackedDurationSeconds ?? ex.duration),
+            0
+          ) / history.length
+        )
       : 0,
     lastExecution: history[0]?.completedAt || null
   }

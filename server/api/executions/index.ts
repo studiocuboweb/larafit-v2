@@ -55,7 +55,17 @@ export default defineEventHandler(async (event) => {
 
   if (method === 'POST') {
     const body = await readBody(event)
-    const { exerciseId, studentId, duration, setsDone, notes } = body
+    const {
+      exerciseId,
+      studentId,
+      duration,
+      setsDone,
+      notes,
+      trackedDurationSeconds,
+      totalDurationSeconds,
+      workoutStartedAt,
+      workoutFinishedAt
+    } = body
 
     if (!exerciseId || !studentId || duration === undefined || setsDone === undefined) {
       throw createError({
@@ -76,15 +86,32 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    const runtimeFields = ((prisma as any)?._runtimeDataModel?.models?.ExerciseExecution?.fields || [])
+      .map((field: any) => field.name)
+    const supportsAdvancedTiming = runtimeFields.includes('trackedDurationSeconds')
+
+    const data: any = {
+      exerciseId,
+      studentId,
+      duration: parseInt(String(duration)),
+      setsDone: parseInt(String(setsDone)),
+      notes: notes || null,
+      completedAt: new Date()
+    }
+
+    if (supportsAdvancedTiming) {
+      data.trackedDurationSeconds = trackedDurationSeconds === undefined
+        ? parseInt(String(duration))
+        : parseInt(String(trackedDurationSeconds))
+      data.totalDurationSeconds = totalDurationSeconds === undefined
+        ? parseInt(String(duration))
+        : parseInt(String(totalDurationSeconds))
+      data.workoutStartedAt = workoutStartedAt ? new Date(workoutStartedAt) : null
+      data.workoutFinishedAt = workoutFinishedAt ? new Date(workoutFinishedAt) : null
+    }
+
     const execution = await prisma.exerciseExecution.create({
-      data: {
-        exerciseId,
-        studentId,
-        duration: parseInt(String(duration)),
-        setsDone: parseInt(String(setsDone)),
-        notes: notes || null,
-        completedAt: new Date()
-      },
+      data,
       include: {
         exercise: {
           include: {

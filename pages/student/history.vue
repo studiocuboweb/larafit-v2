@@ -105,7 +105,7 @@
               <div class="mt-2 text-center">
                 <p class="text-sm text-gray-500">Tempo</p>
                 <p class="text-xl font-bold text-gray-900">
-                  {{ formatTotalTime(totalDuration) }}
+                  {{ formatTotalTime(totalTrackedDuration) }}
                 </p>
               </div>
             </div>
@@ -164,7 +164,10 @@
                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
-                      <span>{{ formatDuration(session.duration) }}</span>
+                      <span>
+                        Total: {{ formatDuration(session.totalDurationSeconds) }}
+                        | Cronômetro: {{ formatDuration(session.trackedDurationSeconds) }}
+                      </span>
                     </div>
                     <div class="flex items-center gap-1">
                       <svg
@@ -377,7 +380,13 @@ const workoutSessions = computed(() => {
         workoutId: workoutId,
         workoutName: execution.exercise.workout.name,
         exercises: [],
-        duration: execution.duration,
+        trackedDurationSeconds:
+          execution.trackedDurationSeconds ?? execution.duration ?? 0,
+        totalDurationSeconds:
+          execution.totalDurationSeconds ??
+          execution.trackedDurationSeconds ??
+          execution.duration ??
+          0,
       });
     }
 
@@ -402,9 +411,16 @@ const totalExercises = computed(() => {
   return executions.value.length;
 });
 
+const totalTrackedDuration = computed(() => {
+  return workoutSessions.value.reduce(
+    (sum, session) => sum + (session.trackedDurationSeconds || 0),
+    0
+  );
+});
+
 const totalDuration = computed(() => {
   return workoutSessions.value.reduce(
-    (sum, session) => sum + session.duration,
+    (sum, session) => sum + (session.totalDurationSeconds || 0),
     0
   );
 });
