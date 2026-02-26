@@ -116,7 +116,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            class="bg-[#f55139] py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-[#f55139] disabled:opacity-50"
           >
             <span v-if="loading">Salvando...</span>
             <span v-else>Salvar Alterações</span>

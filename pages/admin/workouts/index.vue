@@ -9,7 +9,7 @@
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <NuxtLink
           to="/admin/workouts/new"
-          class="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+          class="block rounded-md bg-[#f55139] px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-[#f55139]"
         >
           + Novo Treino
         </NuxtLink>
