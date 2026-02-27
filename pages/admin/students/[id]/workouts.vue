@@ -143,7 +143,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <NuxtLink
                     :to="`/admin/workouts/${workout.id}/edit`"
-                    class="text-blue-600 hover:text-blue-900 mr-4"
+                    class="text-[#f55139] hover:text-blue-900 mr-4"
                   >
                     Editar
                   </NuxtLink>
@@ -174,7 +174,7 @@
             </button>
             <NuxtLink
               :to="`/admin/workouts/create/${studentId}`"
-              class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+              class="inline-flex items-center rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#f55139] disabled:opacity-50"
             >
               + Novo Treino
             </NuxtLink>
@@ -255,7 +255,7 @@
           <button
             @click="handleCopyWorkout"
             :disabled="copyLoading"
-            class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+            class="rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
           >
             {{ copyLoading ? 'Copiando...' : 'Copiar Treino' }}
           </button>

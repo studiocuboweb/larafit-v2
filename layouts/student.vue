@@ -37,7 +37,7 @@
           <NuxtLink
             to="/student/workouts"
             class="flex flex-col items-center justify-center text-white transition-colors"
-            active-class="text-blue-600"
+            active-class="text-[#f55139]"
           >
             <svg
               class="w-6 h-6"
@@ -58,7 +58,7 @@
           <NuxtLink
             to="/student/history"
             class="flex flex-col items-center justify-center text-white transition-colors"
-            active-class="text-blue-600"
+            active-class="text-[#f55139]"
           >
             <svg
               class="w-6 h-6"
@@ -78,7 +78,7 @@
           <NuxtLink
             to="/student/profile"
             class="flex flex-col items-center justify-center text-white transition-colors"
-            active-class="text-blue-600"
+            active-class="text-[#f55139]"
           >
             <svg
               class="w-6 h-6"

@@ -2,7 +2,7 @@
   <NuxtLayout name="admin">
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="mb-6">
-        <NuxtLink to="/admin/students" class="text-blue-600 hover:text-blue-800 inline-flex items-center">
+        <NuxtLink to="/admin/students" class="text-[#f55139] hover:text-blue-800 inline-flex items-center">
           <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
@@ -153,7 +153,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            class="bg-[#f55139] py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-[#f55139] disabled:opacity-50"
           >
             <span v-if="loading">Salvando...</span>
             <span v-else>Criar Aluno</span>

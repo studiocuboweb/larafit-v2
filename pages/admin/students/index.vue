@@ -65,11 +65,11 @@
       <!-- Estatísticas (NOVO LAYOUT) -->
       <div class="mt-6 grid grid-cols-3 gap-5">
         <!-- TOTAL -->
-        <div class="bg-white shadow rounded-lg p-6">
+        <div class="bg-white shadow rounded-lg p-2">
           <div class="flex flex-col items-center text-center">
             <div class="rounded-full bg-blue-100 p-4 mb-3">
               <svg
-                class="h-6 w-6 text-blue-600"
+                class="h-6 w-6 text-[#f55139]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -92,7 +92,7 @@
         </div>
 
         <!-- ATIVOS -->
-        <div class="bg-white shadow rounded-lg p-6">
+        <div class="bg-white shadow rounded-lg p-2">
           <div class="flex flex-col items-center text-center">
             <div class="rounded-full bg-green-100 p-4 mb-3">
               <svg
@@ -119,7 +119,7 @@
         </div>
 
         <!-- INATIVOS -->
-        <div class="bg-white shadow rounded-lg p-6">
+        <div class="bg-white shadow rounded-lg p-2">
           <div class="flex flex-col items-center text-center">
             <div class="rounded-full bg-red-100 p-4 mb-3">
               <svg
@@ -228,7 +228,7 @@
                     >
                       <NuxtLink
                         :to="`/admin/students/${student.id}/edit`"
-                        class="text-blue-600 hover:text-blue-900 mr-4"
+                        class="text-[#f55139] hover:text-blue-900 mr-4"
                       >
                         Editar
                       </NuxtLink>

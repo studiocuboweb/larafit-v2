@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="admin">
-    <div class="px-4 sm:px-6 lg:px-8">
+    <div class="px-4 sm:px-6 lg:px-8 pt-20">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class="text-2xl font-bold text-[#f55139]">Professores</h1>
@@ -9,7 +9,7 @@
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <NuxtLink
             to="/admin/teachers/new"
-            class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="inline-flex items-center rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#f55139]"
           >
             Novo Professor
           </NuxtLink>
@@ -54,68 +54,52 @@
         </div>
       </div>
 
-      <!-- Estatísticas -->
-      <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-3">
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <div class="rounded-md bg-blue-50 p-3">
-                  <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Total</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ stats.total }}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Estatísticas -->
+<div class="mt-6 grid grid-cols-3 gap-4">
 
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <div class="rounded-md bg-green-50 p-3">
-                  <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Ativos</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ stats.active }}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Total -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-blue-50 p-2 mb-2">
+      <svg class="h-5 w-5 text-[#f55139]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z"/>
+      </svg>
+    </div>
+    <p class="text-xs text-gray-500">Total</p>
+    <p class="text-lg font-bold text-gray-900 mt-1">
+      {{ stats.total }}
+    </p>
+  </div>
 
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <div class="rounded-md bg-purple-50 p-3">
-                  <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Treinos Criados</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ stats.totalWorkouts }}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- Ativos -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-green-50 p-2 mb-2">
+      <svg class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+    <p class="text-xs text-gray-500">Ativos</p>
+    <p class="text-lg font-bold text-gray-900 mt-1">
+      {{ stats.active }}
+    </p>
+  </div>
+
+  <!-- Treinos Criados -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-purple-50 p-2 mb-2">
+      <svg class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+    </div>
+    <p class="text-xs text-gray-500">Treinos</p>
+    <p class="text-lg font-bold text-gray-900 mt-1">
+      {{ stats.totalWorkouts }}
+    </p>
+  </div>
+
+</div>
 
       <div class="mt-8 flex flex-col">
         <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -169,7 +153,7 @@
                         <span 
                           v-for="specialty in teacher.specialties" 
                           :key="specialty"
-                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800"
+                          class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium  bg-[#f55139] text-white"
                         >
                           {{ specialty }}
                         </span>
@@ -188,7 +172,7 @@
                       </span>
                     </td>
                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <NuxtLink :to="`/admin/teachers/${teacher.id}`" class="text-blue-600 hover:text-blue-900">
+                      <NuxtLink :to="`/admin/teachers/${teacher.id}`" class="text-[#f55139] hover:text-blue-900">
                         Editar
                       </NuxtLink>
                     </td>

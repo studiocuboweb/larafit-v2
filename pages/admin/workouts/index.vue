@@ -78,7 +78,7 @@
   <!-- Total -->
   <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
     <div class="rounded-full bg-blue-50 p-4 mb-3">
-      <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg class="h-6 w-6 text-[#f55139]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
       </svg>
@@ -164,7 +164,7 @@
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium space-x-2">
                     <NuxtLink
                       :to="`/admin/workouts/${workout.id}/edit`"
-                      class="text-blue-600 hover:text-blue-900"
+                      class="text-[#f55139] hover:text-blue-900"
                     >
                       Editar
                     </NuxtLink>

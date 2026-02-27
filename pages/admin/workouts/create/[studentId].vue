@@ -129,7 +129,7 @@
             <button
               type="submit"
               :disabled="loading"
-              class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#f55139] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {{ loading ? 'Criando...' : 'Criar Treino' }}
             </button>

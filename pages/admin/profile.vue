@@ -68,7 +68,7 @@
               <span
                 v-for="(specialty, index) in form.specialties"
                 :key="index"
-                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#f55139] text-white"
               >
                 {{ specialty }}
                 <button
