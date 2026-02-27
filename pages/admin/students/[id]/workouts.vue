@@ -46,7 +46,7 @@
       <!-- Estatísticas: Ajustadas para ficarem em uma linha com ícone, texto e número empilhados -->
       <div class="grid grid-cols-3 gap-4 mb-8">
         <!-- Total de Treinos -->
-        <div class="bg-white overflow-hidden shadow rounded-lg p-4 flex flex-col items-center text-center">
+        <div class="bg-white overflow-hidden shadow rounded-lg p-2 flex flex-col items-center text-center">
           <div class="flex-shrink-0 mb-2">
             <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -59,7 +59,7 @@
         </div>
 
         <!-- Treinos Ativos -->
-        <div class="bg-white overflow-hidden shadow rounded-lg p-4 flex flex-col items-center text-center">
+        <div class="bg-white overflow-hidden shadow rounded-lg p-2 flex flex-col items-center text-center">
           <div class="flex-shrink-0 mb-2">
             <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Total de Exercícios -->
-        <div class="bg-white overflow-hidden shadow rounded-lg p-4 flex flex-col items-center text-center">
+        <div class="bg-white overflow-hidden shadow rounded-lg p-2 flex flex-col items-center text-center">
           <div class="flex-shrink-0 mb-2">
             <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />

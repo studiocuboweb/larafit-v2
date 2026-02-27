@@ -15,7 +15,7 @@
           <div class="grid grid-cols-3 gap-4">
             
             <!-- Card: Novo Aluno -->
-            <NuxtLink to="/admin/students/new" class="bg-gray-800 rounded-lg shadow p-5 hover:bg-gray-700 transition-colors">
+            <NuxtLink to="/admin/students/new" class="bg-gray-800 rounded-lg shadow p-2 hover:bg-gray-700 transition-colors">
               <div class="flex flex-col items-center text-center">
                 <div class="p-3 rounded-full bg-blue-500 text-white mb-3">
                   <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -27,7 +27,7 @@
             </NuxtLink>
 
             <!-- Card: Novo Treino -->
-            <NuxtLink to="/admin/workouts/new" class="bg-gray-800 rounded-lg shadow p-5 hover:bg-gray-700 transition-colors">
+            <NuxtLink to="/admin/workouts/new" class="bg-gray-800 rounded-lg shadow p-2 hover:bg-gray-700 transition-colors">
               <div class="flex flex-col items-center text-center">
                 <div class="p-3 rounded-full bg-purple-500 text-white mb-3">
                   <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -39,7 +39,7 @@
             </NuxtLink>
 
             <!-- Card: Registrar Pagamento -->
-            <NuxtLink to="/admin/payments/new" class="bg-gray-800 rounded-lg shadow p-5 hover:bg-gray-700 transition-colors">
+            <NuxtLink to="/admin/payments/new" class="bg-gray-800 rounded-lg shadow p-2 hover:bg-gray-700 transition-colors">
               <div class="flex flex-col items-center text-center">
                 <div class="p-3 rounded-full bg-yellow-500 text-white mb-3">
                   <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -59,7 +59,7 @@
           <div class="grid grid-cols-3 gap-4">
 
             <!-- Card: Total de Alunos -->
-            <div class="bg-white rounded-lg shadow p-5">
+            <div class="bg-white rounded-lg shadow p-2">
               <div class="flex flex-col items-center text-center">
                 <div class="p-3 rounded-full bg-blue-100 text-blue-600 mb-3">
                   <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -72,7 +72,7 @@
             </div>
 
             <!-- Card: Total de Treinos -->
-            <div class="bg-white rounded-lg shadow p-5">
+            <div class="bg-white rounded-lg shadow p-2">
               <div class="flex flex-col items-center text-center">
                 <div class="p-3 rounded-full bg-purple-100 text-purple-600 mb-3">
                   <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -85,7 +85,7 @@
             </div>
 
             <!-- Card: Receita Mensal -->
-            <div class="bg-white rounded-lg shadow p-5">
+            <div class="bg-white rounded-lg shadow p-2">
               <div class="flex flex-col items-center text-center">
                 <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mb-3">
                   <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
