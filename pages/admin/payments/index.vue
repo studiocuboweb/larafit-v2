@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="admin">
-    <div class="px-4 sm:px-6 lg:px-8">
+    <div class="px-4 sm:px-6 lg:px-8 pt-20">
       <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
           <h1 class="text-2xl font-bold text-[#f55139]">Pagamentos</h1>
@@ -9,7 +9,7 @@
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <NuxtLink
             to="/admin/payments/new"
-            class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="inline-flex items-center justify-center rounded-md border border-transparent bg-[#f55139] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#f55139] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Registrar Pagamento
           </NuxtLink>
@@ -61,88 +61,69 @@
         </div>
       </div>
 
-      <!-- Estatísticas -->
-      <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-4">
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <div class="rounded-md bg-green-50 p-3">
-                  <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Pagos</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ stats.paid }}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+<!-- Estatísticas -->
+<div class="mt-6 grid grid-cols-3 gap-6">
 
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <div class="rounded-md bg-yellow-50 p-3">
-                  <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Pendentes</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ stats.pending }}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Pagos -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-green-50 p-4">
+      <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+    <p class="text-sm text-gray-500">Pagos</p>
+    <p class="text-xl font-bold text-gray-900">
+      {{ stats.paid }}
+    </p>
+  </div>
 
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <div class="rounded-md bg-red-50 p-3">
-                  <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Atrasados</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ stats.overdue }}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Pendentes -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-yellow-50 p-4">
+      <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+    </div>
+    <p class="text-sm text-gray-500">Pendentes</p>
+    <p class="text-xl font-bold text-gray-900">
+      {{ stats.pending }}
+    </p>
+  </div>
 
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <div class="rounded-md bg-blue-50 p-3">
-                  <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Total Recebido</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ formatCurrency(stats.totalPaid) }}</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- Atrasados -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-red-50 p-4">
+      <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+      </svg>
+    </div>
+    <p class="text-sm text-gray-500">Atrasados</p>
+    <p class="text-xl font-bold text-gray-900">
+      {{ stats.overdue }}
+    </p>
+  </div>
+
+<!-- Total Recebido -->
+<div class="bg-white shadow rounded-lg p-2 flex items-center col-span-3">
+  <div class="rounded-full bg-blue-50 p-5 mr-6 flex-shrink-0">
+    <svg class="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+  </div>
+
+  <div>
+    <p class="text-sm text-gray-500">Total Recebido</p>
+    <p class="text-3xl font-bold text-gray-900">
+      {{ formatCurrency(stats.totalPaid) }}
+    </p>
+  </div>
+</div>
+
+</div>
 
       <!-- Tabela de Pagamentos -->
       <div class="mt-8 flex flex-col">
