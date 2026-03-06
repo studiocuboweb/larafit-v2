@@ -92,7 +92,7 @@
             <button
               type="submit"
               :disabled="savingWorkout"
-              class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+              class="rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
             >
               {{ savingWorkout ? 'Salvando...' : 'Salvar Alterações' }}
             </button>
@@ -102,11 +102,8 @@
 
       <!-- Exercícios -->
       <div class="bg-white shadow rounded-lg p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-semibold text-gray-900">
-            Exercícios ({{ exercises.length }})
-          </h2>
-          <div class="flex gap-2">
+        <div class="mb-4 space-y-3">
+          <div class="flex flex-wrap justify-end gap-2">
             <button
               v-if="selectedExercises.length >= 2"
               @click="groupSelected"
@@ -122,11 +119,15 @@
             </button>
             <button
               @click="openExerciseModal()"
-              class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+              class="inline-flex items-center rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
             >
               + Criar Novo Exercício
             </button>
           </div>
+
+          <h2 class="text-lg font-semibold text-gray-900">
+            Exercícios ({{ exercises.length }})
+          </h2>
         </div>
 
         <!-- Lista de exercícios -->
@@ -147,7 +148,7 @@
                 type="checkbox"
                 :value="exercise.id"
                 v-model="selectedExercises"
-                class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                class="mt-1 h-4 w-4 text-[#f55139] focus:ring-blue-500 border-gray-300 rounded"
               />
 
               <!-- Número de ordem -->
@@ -164,8 +165,8 @@
                   </span>
                 </div>
 
-                <div class="flex items-start justify-between">
-                  <div class="flex-1">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div class="flex-1 min-w-0">
                     <h3 class="text-sm font-semibold text-gray-900">{{ exercise.name }}</h3>
                     <div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                       <span>{{ exercise.sets }} séries</span>
@@ -177,7 +178,7 @@
                   </div>
 
                   <!-- Ações -->
-                  <div class="flex items-center gap-1 ml-4">
+                  <div class="flex items-center gap-1 self-end sm:self-auto sm:ml-4 shrink-0">
                     <button
                       @click="moveExercise(exercise.id, 'up')"
                       :disabled="index === 0"
@@ -200,7 +201,7 @@
                     </button>
                     <button
                       @click="openExerciseModal(exercise)"
-                      class="p-1 text-blue-400 hover:text-blue-600"
+                      class="p-1 text-blue-400 hover:text-[#f55139]"
                       title="Editar"
                     >
                       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -336,7 +337,7 @@
               <button
                 type="submit"
                 :disabled="savingExercise"
-                class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+                class="rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
               >
                 {{ savingExercise ? 'Salvando...' : 'Salvar' }}
               </button>

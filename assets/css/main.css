@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --admin-header-height: 5rem;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply font-body text-gray-900;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-heading;
+  }
+}

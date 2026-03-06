@@ -5,7 +5,7 @@
       <div class="mb-6">
         <NuxtLink
           :to="`/admin/students/${studentId}/edit`"
-          class="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 mb-4"
+          class="mt-2 mb-4 inline-flex items-center justify-center py-1 px-2 bg-[#f55139] text-white text-xs font-bold rounded-lg shadow-sm hover:bg-[#d43d28] transition-colors group"
         >
           <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -28,7 +28,7 @@
               </button>
               <NuxtLink
                 :to="`/admin/workouts/create/${studentId}`"
-                class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+                class="inline-flex items-center rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#f55139]"
               >
                 + Novo Treino
               </NuxtLink>
@@ -43,59 +43,44 @@
         </div>
       </div>
 
-      <!-- Estatísticas -->
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-3 mb-8">
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Total de Treinos</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ workouts?.length || 0 }}</dd>
-                </dl>
-              </div>
-            </div>
+      <!-- Estatísticas: Ajustadas para ficarem em uma linha com ícone, texto e número empilhados -->
+      <div class="grid grid-cols-3 gap-4 mb-8">
+        <!-- Total de Treinos -->
+        <div class="bg-white overflow-hidden shadow rounded-lg p-2 flex flex-col items-center text-center">
+          <div class="flex-shrink-0 mb-2">
+            <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+          <div class="w-full">
+            <p class="text-xs font-medium text-gray-500 tracking-wider truncate">Total de<br/>Treinos</p>
+            <p class="mt-1 text-lg font-bold text-gray-900">{{ workouts?.length || 0 }}</p>
           </div>
         </div>
 
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Treinos Ativos</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ activeWorkouts }}</dd>
-                </dl>
-              </div>
-            </div>
+        <!-- Treinos Ativos -->
+        <div class="bg-white overflow-hidden shadow rounded-lg p-2 flex flex-col items-center text-center">
+          <div class="flex-shrink-0 mb-2">
+            <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="w-full">
+            <p class="text-xs font-medium text-gray-500 tracking-wider truncate">Treinos<br/>Ativos</p>
+            <p class="mt-1 text-lg font-bold text-gray-900">{{ activeWorkouts }}</p>
           </div>
         </div>
 
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Total de Exercícios</dt>
-                  <dd class="text-lg font-semibold text-gray-900">{{ totalExercises }}</dd>
-                </dl>
-              </div>
-            </div>
+        <!-- Total de Exercícios -->
+        <div class="bg-white overflow-hidden shadow rounded-lg p-2 flex flex-col items-center text-center">
+          <div class="flex-shrink-0 mb-2">
+            <svg class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div class="w-full">
+            <p class="text-xs font-medium text-gray-500 tracking-wider truncate">Total de<br/>Exercícios</p>
+            <p class="mt-1 text-lg font-bold text-gray-900">{{ totalExercises }}</p>
           </div>
         </div>
       </div>
@@ -158,7 +143,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <NuxtLink
                     :to="`/admin/workouts/${workout.id}/edit`"
-                    class="text-blue-600 hover:text-blue-900 mr-4"
+                    class="text-[#f55139] hover:text-blue-900 mr-4"
                   >
                     Editar
                   </NuxtLink>
@@ -189,7 +174,7 @@
             </button>
             <NuxtLink
               :to="`/admin/workouts/create/${studentId}`"
-              class="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+              class="inline-flex items-center rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#f55139] disabled:opacity-50"
             >
               + Novo Treino
             </NuxtLink>
@@ -270,7 +255,7 @@
           <button
             @click="handleCopyWorkout"
             :disabled="copyLoading"
-            class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
+            class="rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:opacity-50"
           >
             {{ copyLoading ? 'Copiando...' : 'Copiar Treino' }}
           </button>

@@ -2,7 +2,7 @@
   <NuxtLayout name="admin">
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="mb-6">
-        <NuxtLink to="/admin/payments" class="text-blue-600 hover:text-blue-800 inline-flex items-center">
+        <NuxtLink to="/admin/payments" class="text-[#f55139] hover:text-blue-800 inline-flex items-center">
           <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
@@ -164,7 +164,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            class="bg-[#f55139] py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-[#f55139] disabled:opacity-50"
           >
             <span v-if="loading">Salvando...</span>
             <span v-else>{{ isEditing ? 'Atualizar' : 'Registrar' }} Pagamento</span>
@@ -180,7 +180,11 @@ const route = useRoute()
 const router = useRouter()
 
 const paymentId = route.params.id as string
-const isEditing = computed(() => paymentId && paymentId !== 'new')
+const isEditing = computed(() => Boolean(paymentId && paymentId !== 'new'))
+
+const toDateInput = (value: string | Date) => {
+  return new Date(value).toISOString().split('T')[0] || ''
+}
 
 // Buscar alunos para o select
 const { data: students } = await useFetch('/api/students')
@@ -208,8 +212,8 @@ if (isEditing.value) {
     form.value = {
       studentId: payment.value.studentId,
       amount: payment.value.amount,
-      dueDate: new Date(payment.value.dueDate).toISOString().split('T')[0],
-      paymentDate: payment.value.paymentDate ? new Date(payment.value.paymentDate).toISOString().split('T')[0] : '',
+      dueDate: toDateInput(payment.value.dueDate),
+      paymentDate: payment.value.paymentDate ? toDateInput(payment.value.paymentDate) : '',
       status: payment.value.status,
       method: payment.value.method || '',
       description: payment.value.description || '',
@@ -220,7 +224,7 @@ if (isEditing.value) {
   // Valores padrão para novo pagamento
   const now = new Date()
   form.value.referenceMonth = now.toISOString().substring(0, 7)
-  form.value.dueDate = new Date(now.getFullYear(), now.getMonth(), 10).toISOString().split('T')[0]
+  form.value.dueDate = toDateInput(new Date(now.getFullYear(), now.getMonth(), 10))
 }
 
 const handleSubmit = async () => {

@@ -9,7 +9,7 @@
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <NuxtLink
           to="/admin/workouts/new"
-          class="block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+          class="inline-flex items-center rounded-md bg-[#f55139] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#f55139]"
         >
           + Novo Treino
         </NuxtLink>
@@ -72,88 +72,46 @@
       </div>
     </div>
 
-    <!-- Estatísticas -->
-    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-4">
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <div class="rounded-md bg-blue-50 p-3">
-                <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Total</dt>
-                <dd class="text-lg font-semibold text-gray-900">{{ stats.total }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <div class="rounded-md bg-green-50 p-3">
-                <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Ativos</dt>
-                <dd class="text-lg font-semibold text-gray-900">{{ stats.active }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <div class="rounded-md bg-yellow-50 p-3">
-                <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
-              </div>
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Rascunho</dt>
-                <dd class="text-lg font-semibold text-gray-900">{{ stats.draft }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white overflow-hidden shadow rounded-lg">
-        <div class="p-5">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <div class="rounded-md bg-purple-50 p-3">
-                <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-            </div>
-            <div class="ml-5 w-0 flex-1">
-              <dl>
-                <dt class="text-sm font-medium text-gray-500 truncate">Exercícios</dt>
-                <dd class="text-lg font-semibold text-gray-900">{{ stats.totalExercises }}</dd>
-              </dl>
-            </div>
-          </div>
-        </div>
-      </div>
+ <!-- Estatísticas -->
+<div class="mt-6 grid grid-cols-3 gap-6">
+  
+  <!-- Total -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-blue-50 p-4 mb-3">
+      <svg class="h-6 w-6 text-[#f55139]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" />
+      </svg>
     </div>
+    <p class="text-sm font-medium text-gray-500">Total</p>
+    <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.total }}</p>
+  </div>
+
+  <!-- Ativos -->
+  <div class="bg-white shadow rounded-lg p2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-green-50 p-4 mb-3">
+      <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <p class="text-sm font-medium text-gray-500">Ativos</p>
+    <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.active }}</p>
+  </div>
+
+  <!-- Rascunho -->
+  <div class="bg-white shadow rounded-lg p-2 flex flex-col items-center text-center">
+    <div class="rounded-full bg-yellow-50 p-4 mb-3">
+      <svg class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+      </svg>
+    </div>
+    <p class="text-sm font-medium text-gray-500">Rascunho</p>
+    <p class="text-2xl font-bold text-gray-900 mt-1">{{ stats.draft }}</p>
+  </div>
+
+</div>
 
     <!-- Tabela -->
     <div class="mt-8 flex flex-col">
@@ -206,7 +164,7 @@
                   <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium space-x-2">
                     <NuxtLink
                       :to="`/admin/workouts/${workout.id}/edit`"
-                      class="text-blue-600 hover:text-blue-900"
+                      class="text-[#f55139] hover:text-blue-900"
                     >
                       Editar
                     </NuxtLink>
