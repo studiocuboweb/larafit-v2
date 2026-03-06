@@ -180,7 +180,11 @@ const route = useRoute()
 const router = useRouter()
 
 const paymentId = route.params.id as string
-const isEditing = computed(() => paymentId && paymentId !== 'new')
+const isEditing = computed(() => Boolean(paymentId && paymentId !== 'new'))
+
+const toDateInput = (value: string | Date) => {
+  return new Date(value).toISOString().split('T')[0] || ''
+}
 
 // Buscar alunos para o select
 const { data: students } = await useFetch('/api/students')
@@ -208,8 +212,8 @@ if (isEditing.value) {
     form.value = {
       studentId: payment.value.studentId,
       amount: payment.value.amount,
-      dueDate: new Date(payment.value.dueDate).toISOString().split('T')[0],
-      paymentDate: payment.value.paymentDate ? new Date(payment.value.paymentDate).toISOString().split('T')[0] : '',
+      dueDate: toDateInput(payment.value.dueDate),
+      paymentDate: payment.value.paymentDate ? toDateInput(payment.value.paymentDate) : '',
       status: payment.value.status,
       method: payment.value.method || '',
       description: payment.value.description || '',
@@ -220,7 +224,7 @@ if (isEditing.value) {
   // Valores padrão para novo pagamento
   const now = new Date()
   form.value.referenceMonth = now.toISOString().substring(0, 7)
-  form.value.dueDate = new Date(now.getFullYear(), now.getMonth(), 10).toISOString().split('T')[0]
+  form.value.dueDate = toDateInput(new Date(now.getFullYear(), now.getMonth(), 10))
 }
 
 const handleSubmit = async () => {

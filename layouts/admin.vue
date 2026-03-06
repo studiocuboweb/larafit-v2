@@ -5,7 +5,7 @@
     <!-- 1. Barra Superior Otimizada (Fixa) -->
     <header class="fixed top-0 left-0 right-0 bg-gray-800 border-b border-gray-700 shadow-sm z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+        <div class="flex justify-between items-center h-[var(--admin-header-height)]">
           
           <!-- Lado Esquerdo: Logo e Informações do Usuário -->
           <div class="flex items-center gap-4">
@@ -38,7 +38,7 @@
     </header>
 
     <!-- 2. Conteúdo Principal da Página -->
-    <main class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto sm:px-6 lg:px-8 pt-[calc(var(--admin-header-height)+1rem)]">
       <slot />
     </main>
 

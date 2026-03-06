@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div class="mt-8 max-w-3xl">
+      <div class="mt-8 w-full">
         <form @submit.prevent="handleSubmit" class="space-y-6">
           <div class="bg-white shadow rounded-lg p-6 space-y-6">
             <!-- Nome do Treino -->

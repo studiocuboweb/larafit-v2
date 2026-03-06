@@ -3,7 +3,7 @@
     <div class="px-4 sm:px-6 lg:px-8">
       <!-- Cabeçalho da Página -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-[#f55139] pt-20">Dashboard</h1>
+        <h1 class="text-3xl font-bold text-[#f55139]">Dashboard</h1>
       </div>
 
       <!-- Container Principal com as duas linhas -->

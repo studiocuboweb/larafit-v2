@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --admin-header-height: 5rem;
+  }
+
   html {
     @apply font-sans;
   }

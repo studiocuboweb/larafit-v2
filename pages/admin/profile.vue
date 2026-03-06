@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="admin">
-    <div class="px-4 sm:px-6 lg:px-8 pt-20">
+    <div class="px-4 sm:px-6 lg:px-8">
       <div class="mb-6">
         <h1 class="text-2xl font-bold text-[#f55139]">Meu Perfil</h1>
         <p class="mt-2 text-sm text-white">Atualize seus dados de cadastro e senha</p>

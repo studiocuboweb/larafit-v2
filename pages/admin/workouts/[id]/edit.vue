@@ -102,11 +102,8 @@
 
       <!-- Exercícios -->
       <div class="bg-white shadow rounded-lg p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-semibold text-gray-900">
-            Exercícios ({{ exercises.length }})
-          </h2>
-          <div class="flex gap-2">
+        <div class="mb-4 space-y-3">
+          <div class="flex flex-wrap justify-end gap-2">
             <button
               v-if="selectedExercises.length >= 2"
               @click="groupSelected"
@@ -127,6 +124,10 @@
               + Criar Novo Exercício
             </button>
           </div>
+
+          <h2 class="text-lg font-semibold text-gray-900">
+            Exercícios ({{ exercises.length }})
+          </h2>
         </div>
 
         <!-- Lista de exercícios -->
@@ -164,8 +165,8 @@
                   </span>
                 </div>
 
-                <div class="flex items-start justify-between">
-                  <div class="flex-1">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div class="flex-1 min-w-0">
                     <h3 class="text-sm font-semibold text-gray-900">{{ exercise.name }}</h3>
                     <div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
                       <span>{{ exercise.sets }} séries</span>
@@ -177,7 +178,7 @@
                   </div>
 
                   <!-- Ações -->
-                  <div class="flex items-center gap-1 ml-4">
+                  <div class="flex items-center gap-1 self-end sm:self-auto sm:ml-4 shrink-0">
                     <button
                       @click="moveExercise(exercise.id, 'up')"
                       :disabled="index === 0"

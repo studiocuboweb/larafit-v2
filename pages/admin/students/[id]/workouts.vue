@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="admin">
-    <div class="px-4 sm:px-6 lg:px-8 pt-20">
+    <div class="px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-6">
         <NuxtLink
