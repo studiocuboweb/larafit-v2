@@ -128,7 +128,7 @@
 
                 <!-- Info do Exercício -->
                 <div class="flex-1 min-w-0">
-                  <h3 class="text-lg font-semibold text-gray-900 truncate">
+                  <h3 class="text-lg font-semibold text-gray-900 leading-tight break-words">
                     {{ exercise.name }}
                   </h3>
                   <div
